@@ -2,11 +2,12 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 /**
- * Login/Signup page component.
- * Allows users to authenticate with email/password.
- * Toggles between login and signup modes.
+ * Login/Signup page
+ * Authenticate with email/password
+ * Toggles between login and signup modes
  */
 export default function LoginPage() {
   const router = useRouter();
@@ -21,7 +22,7 @@ export default function LoginPage() {
   const [message, setMessage] = useState("");
 
   /**
-   * Handles form submission for both login and signup.
+   * Handles form submission for login and signup
    */
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -66,8 +67,8 @@ export default function LoginPage() {
   }
 
   /**
-   * Toggles between login and signup modes.
-   * Clears any existing errors/messages.
+   * Toggles between login and signup modes
+   * Clears existing errors/messages
    */
   function toggleMode() {
     setIsSignup(!isSignup);
@@ -93,7 +94,7 @@ export default function LoginPage() {
           onSubmit={handleSubmit}
           className="rounded-lg border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900"
         >
-          {/* Username field - only shown in signup mode */}
+          {/* Username input - only shown in signup mode */}
           {isSignup && (
             <div className="mb-4">
               <label 
@@ -116,7 +117,7 @@ export default function LoginPage() {
             </div>
           )}
 
-          {/* Email field */}
+          {/* Email input */}
           <div className="mb-4">
             <label 
               htmlFor="email"
@@ -135,7 +136,7 @@ export default function LoginPage() {
             />
           </div>
 
-          {/* Password field */}
+          {/* Password input */}
           <div className="mb-6">
             <label 
               htmlFor="password"
@@ -185,7 +186,7 @@ export default function LoginPage() {
           </button>
         </form>
 
-        {/* Toggle between login/signup */}
+        {/* Toggle login/signup */}
         <p className="mt-6 text-center text-sm text-zinc-600 dark:text-zinc-400">
           {isSignup ? "Already have an account?" : "Don't have an account?"}{" "}
           <button
@@ -199,12 +200,12 @@ export default function LoginPage() {
 
         {/* Back to home link */}
         <p className="mt-4 text-center">
-          <a 
+          <Link 
             href="/"
             className="text-sm text-zinc-500 hover:text-zinc-700 dark:text-zinc-500 dark:hover:text-zinc-300"
           >
             ← Back to home
-          </a>
+          </Link>
         </p>
       </main>
     </div>
