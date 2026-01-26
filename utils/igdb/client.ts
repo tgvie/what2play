@@ -32,7 +32,7 @@ async function getAccessToken(): Promise<string> {
   cachedToken = data.access_token;
   tokenExpiry = Date.now() + data.expires_in * 1000;
 
-  return cachedToken;
+  return cachedToken as string;
 }
 
 // Search games on IGDB by query string
@@ -73,6 +73,54 @@ export async function searchGames(query: string, limit: number = 20) {
     title: game.name,
     // IGDB returns URLs starting with // need to add https:
     // Convert thumbnail to larger cover image
+    cover_url: game.cover?.url
+      ? "https:" + game.cover.url.replace("t_thumb", "t_cover_big")
+      : null,
+    release_year: game.first_release_date
+      ? new Date(game.first_release_date * 1000).getFullYear()
+      : null,
+    summary: game.summary || null,
+  }));
+}
+
+// Fetch 10 random popular games on each call
+export async function getRandomGames(count: number = 10) {
+  const token = await getAccessToken();
+  const clientId = process.env.TWITCH_CLIENT_ID!;
+
+  // Random offset between 0 and 500 for variety
+  const randomOffset = Math.floor(Math.random() * 500);
+
+  // Get popular games with covers, using random offset for variety to avoid duplicates
+  const body = `fields id, name, cover.url, first_release_date, summary; where cover != null & rating > 70; sort rating desc; limit ${count}; offset ${randomOffset};`;
+
+  const response = await fetch("https://api.igdb.com/v4/games", {
+    method: "POST",
+    headers: {
+      "Client-ID": clientId,
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "text/plain",
+    },
+    body: body,
+  });
+
+  if (!response.ok) {
+    const error = await response.text();
+    console.error("IGDB API error:", error);
+    throw new Error("Failed to fetch random games");
+  }
+
+  const games = await response.json();
+
+  return games.map((game: {
+    id: number;
+    name: string;
+    cover?: { url: string };
+    first_release_date?: number;
+    summary?: string;
+  }) => ({
+    igdb_id: game.id,
+    title: game.name,
     cover_url: game.cover?.url
       ? "https:" + game.cover.url.replace("t_thumb", "t_cover_big")
       : null,
