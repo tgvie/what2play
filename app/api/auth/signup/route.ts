@@ -1,11 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createAnonClient } from "@/utils/supabase/server";
+import { createAnonClient, createServerClient } from "@/utils/supabase/server";
 
-/**
- * POST /api/auth/signup
- * Registers a new user with email, password, and username.
- * Creates the user in Supabase Auth and adds a profile entry.
- */
+// POST /api/auth/signup -> Register new user and create profile
 export async function POST(request: NextRequest) {
   try {
     const { email, password, username } = await request.json();
@@ -33,7 +29,6 @@ export async function POST(request: NextRequest) {
       email,
       password,
       options: {
-        // Store username in user metadata for easy access
         data: { username },
       },
     });
@@ -42,7 +37,24 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: authError.message }, { status: 400 });
     }
 
-    // If signup successful, return session tokens via cookies
+    // When user is created, also create a profile entry
+    if (authData.user) {
+      const serverClient = createServerClient();
+      const { error: profileError } = await serverClient
+        .from("profiles")
+        .insert({
+          id: authData.user.id,
+          username: username,
+        });
+
+      if (profileError) {
+        console.error("Profile creation error:", profileError);
+        // Profile creation failed BUT user exists in auth
+        // Continue anyway since auth succeeded
+      }
+    }
+
+    // If signup successful with session, return tokens via cookies
     if (authData.session) {
       const response = NextResponse.json(
         {
@@ -61,7 +73,7 @@ export async function POST(request: NextRequest) {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: "lax",
-        maxAge: 60 * 60, // 1 hour
+        maxAge: 60 * 60,
         path: "/",
       });
 
@@ -69,7 +81,7 @@ export async function POST(request: NextRequest) {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: "lax",
-        maxAge: 60 * 60 * 24 * 7, // 7 days
+        maxAge: 60 * 60 * 24 * 7,
         path: "/",
       });
 
