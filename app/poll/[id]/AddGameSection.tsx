@@ -13,6 +13,7 @@ export default function AddGameSection({ pollId, onGameAdded }: AddGameSectionPr
   const [adding, setAdding] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [resetKey, setResetKey] = useState(0);
 
   // Handle adding a game to the poll
   async function handleAddGame(game: Game) {
@@ -40,6 +41,7 @@ export default function AddGameSection({ pollId, onGameAdded }: AddGameSectionPr
 
       setSuccess(`"${game.title}" added to poll!`);
       onGameAdded();
+      setResetKey((prev) => prev + 1);
 
       // Clear success message after 3 seconds
       setTimeout(() => setSuccess(""), 3000);
@@ -78,6 +80,7 @@ export default function AddGameSection({ pollId, onGameAdded }: AddGameSectionPr
         showAddButton={true}
         addButtonLabel={adding ? "Adding..." : "Add"}
         onGameSelect={handleAddGame}
+        resetKey={resetKey}
       />
     </div>
   );

@@ -16,6 +16,7 @@ type GameExplorerProps = {
   placeholder?: string;
   showAddButton?: boolean;
   addButtonLabel?: string;
+  resetKey?: number;
 };
 
 // Reusable game search/explorer component with debounced input
@@ -24,12 +25,23 @@ export default function GameExplorer({
   placeholder = "Search for a game...",
   showAddButton = false,
   addButtonLabel = "Add",
+  resetKey = 0,
 }: GameExplorerProps) {
   const [query, setQuery] = useState("");
   const [games, setGames] = useState<Game[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [hasSearched, setHasSearched] = useState(false);
+
+  // Reset search when resetKey changes
+  useEffect(() => {
+    if (resetKey > 0) {
+      setQuery("");
+      setGames([]);
+      setHasSearched(false);
+      setError("");
+    }
+  }, [resetKey]);
 
   // Delay search effect
   useEffect(() => {
