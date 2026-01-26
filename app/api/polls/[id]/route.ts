@@ -52,10 +52,24 @@ export async function GET(
       );
     }
 
-    // Fetch games added to this poll
+    // Fetch games added to this poll with vote counts and voters
     const { data: games, error: gamesError } = await supabase
       .from("poll_games")
-      .select("id, igdb_id, title, cover_url, created_at")
+      .select(`
+        id,
+        igdb_id,
+        title,
+        cover_url,
+        created_at,
+        votes (
+          id,
+          user_id,
+          profiles:user_id (
+            id,
+            username
+          )
+        )
+      `)
       .eq("poll_id", id)
       .order("created_at", { ascending: true });
 
@@ -63,6 +77,26 @@ export async function GET(
       console.error("Games fetch error:", gamesError);
       // Continue without games rather than failing entirely
     }
+
+    // Transform games to include vote_count and voters array
+    const gamesWithVotes = (games || []).map((game) => {
+      const votes = game.votes || [];
+      return {
+        id: game.id,
+        igdb_id: game.igdb_id,
+        title: game.title,
+        cover_url: game.cover_url,
+        created_at: game.created_at,
+        vote_count: votes.length,
+        voters: votes.map((vote: { profiles: { id: string; username: string }[] | { id: string; username: string } | null }) => {
+          const profile = Array.isArray(vote.profiles) ? vote.profiles[0] : vote.profiles;
+          return {
+            id: profile?.id || null,
+            username: profile?.username || "Unknown",
+          };
+        }),
+      };
+    });
 
     return NextResponse.json({
       poll: {
@@ -72,7 +106,7 @@ export async function GET(
         created_at: poll.created_at,
         creator: poll.profiles || null,
       },
-      games: games || [],
+      games: gamesWithVotes,
     });
   } catch (error) {
     console.error("Poll fetch error:", error);

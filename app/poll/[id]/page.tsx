@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { headers } from "next/headers";
+import { headers, cookies } from "next/headers";
 import { notFound } from "next/navigation";
-import { createServerClient } from "@/utils/supabase/server";
+import { createServerClient, createAnonClient } from "@/utils/supabase/server";
 import CopyButton from "./CopyButton";
 import PollGamesSection from "./PollGamesSection";
 
@@ -11,12 +11,19 @@ type PollCreator = {
   username: string;
 };
 
+type Voter = {
+  id: string | null;
+  username: string;
+};
+
 type PollGame = {
   id: string;
   igdb_id: number;
   title: string;
   cover_url: string | null;
   created_at: string;
+  vote_count: number;
+  voters: Voter[];
 };
 
 // Displays poll details, games list, shareable link, search and add
@@ -26,6 +33,19 @@ export default async function PollPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
+
+  // Get current user from cookies
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get("access_token")?.value;
+  let currentUserId: string | null = null;
+
+  if (accessToken) {
+    const anonClient = createAnonClient();
+    const { data: userData } = await anonClient.auth.getUser(accessToken);
+    if (userData?.user) {
+      currentUserId = userData.user.id;
+    }
+  }
 
   // Fetch poll data from database
   const supabase = createServerClient();
@@ -52,10 +72,24 @@ export default async function PollPage({
     notFound();
   }
 
-  // Fetch games added to this poll
+  // Fetch games with vote data
   const { data: games } = await supabase
     .from("poll_games")
-    .select("id, igdb_id, title, cover_url, created_at")
+    .select(`
+      id,
+      igdb_id,
+      title,
+      cover_url,
+      created_at,
+      votes (
+        id,
+        user_id,
+        profiles:user_id (
+          id,
+          username
+        )
+      )
+    `)
     .eq("poll_id", id)
     .order("created_at", { ascending: true });
 
@@ -77,7 +111,26 @@ export default async function PollPage({
   const creator: PollCreator | null = Array.isArray(profilesData)
     ? profilesData[0] || null
     : profilesData || null;
-  const pollGames = (games || []) as PollGame[];
+
+  // Transform games to include vote_count and voters
+  const pollGames: PollGame[] = (games || []).map((game) => {
+    const votes = game.votes || [];
+    return {
+      id: game.id,
+      igdb_id: game.igdb_id,
+      title: game.title,
+      cover_url: game.cover_url,
+      created_at: game.created_at,
+      vote_count: votes.length,
+      voters: votes.map((vote: { profiles: { id: string; username: string }[] | { id: string; username: string } | null }) => {
+        const profile = Array.isArray(vote.profiles) ? vote.profiles[0] : vote.profiles;
+        return {
+          id: profile?.id || null,
+          username: profile?.username || "Unknown",
+        };
+      }),
+    };
+  });
 
   return (
     <div className="min-h-screen bg-zinc-50 px-4 py-8 dark:bg-black">
@@ -118,7 +171,11 @@ export default async function PollPage({
         </div>
 
         {/* Games Section -> client component with add functionality */}
-        <PollGamesSection pollId={id} initialGames={pollGames} />
+        <PollGamesSection
+          pollId={id}
+          initialGames={pollGames}
+          currentUserId={currentUserId}
+        />
 
         {/* Navigation */}
         <div className="flex justify-center gap-4 border-t border-zinc-200 pt-6 dark:border-zinc-800">

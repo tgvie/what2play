@@ -1,7 +1,12 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useCallback } from "react";
 import AddGameSection from "./AddGameSection";
+
+type Voter = {
+  id: string | null;
+  username: string;
+};
 
 type PollGame = {
   id: string;
@@ -9,20 +14,26 @@ type PollGame = {
   title: string;
   cover_url: string | null;
   created_at: string;
+  vote_count: number;
+  voters: Voter[];
 };
 
 type PollGamesSectionProps = {
   pollId: string;
   initialGames: PollGame[];
+  currentUserId: string | null;
 };
 
-// Client component for games list with add functionality
-export default function PollGamesSection({ pollId, initialGames }: PollGamesSectionProps) {
+// Client component for games list with voting and add game
+export default function PollGamesSection({
+  pollId,
+  initialGames,
+  currentUserId,
+}: PollGamesSectionProps) {
   const [games, setGames] = useState<PollGame[]>(initialGames);
-  const [refreshKey, setRefreshKey] = useState(0);
 
   // Refresh games from server
-  async function refreshGames() {
+  const refreshGames = useCallback(async () => {
     try {
       const response = await fetch(`/api/polls/${pollId}`);
       const data = await response.json();
@@ -32,30 +43,21 @@ export default function PollGamesSection({ pollId, initialGames }: PollGamesSect
     } catch (err) {
       console.error("Failed to refresh games:", err);
     }
-  }
-
-  // Trigger refresh when a game is added
-  function handleGameAdded() {
-    setRefreshKey((prev) => prev + 1);
-  }
-
-  // Refresh games when refreshKey changes
-  useEffect(() => {
-    if (refreshKey > 0) {
-      refreshGames();
-    }
-  }, [refreshKey]);
+  }, [pollId]);
 
   return (
     <div className="mb-6">
       {/* Add Game Section */}
-      <AddGameSection pollId={pollId} onGameAdded={handleGameAdded} />
+      <AddGameSection pollId={pollId} onGameAdded={refreshGames} />
 
       {/* Games List Header */}
       <div className="mb-4">
         <h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-50">
           Game Suggestions ({games.length})
         </h2>
+        <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-500">
+          Click &quot;Vote&quot; to vote for a game. Click again to remove your vote.
+        </p>
       </div>
 
       {/* Games List */}
@@ -68,7 +70,13 @@ export default function PollGamesSection({ pollId, initialGames }: PollGamesSect
       ) : (
         <div className="grid gap-4 sm:grid-cols-2">
           {games.map((game) => (
-            <GameCard key={game.id} game={game} />
+            <GameCard
+              key={game.id}
+              game={game}
+              pollId={pollId}
+              currentUserId={currentUserId}
+              onVoteChange={refreshGames}
+            />
           ))}
         </div>
       )}
@@ -76,11 +84,53 @@ export default function PollGamesSection({ pollId, initialGames }: PollGamesSect
   );
 }
 
-// Game card component
-function GameCard({ game }: { game: PollGame }) {
+// Game card component with voting
+function GameCard({
+  game,
+  pollId,
+  currentUserId,
+  onVoteChange,
+}: {
+  game: PollGame;
+  pollId: string;
+  currentUserId: string | null;
+  onVoteChange: () => void;
+}) {
+  const [voting, setVoting] = useState(false);
+
+  // Check if current user has voted
+  const hasVoted = currentUserId
+    ? game.voters.some((v) => v.id === currentUserId)
+    : false;
+
+  // Handle vote toggle
+  async function handleVote() {
+    if (!currentUserId) return;
+
+    setVoting(true);
+    try {
+      const response = await fetch(`/api/polls/${pollId}/games/${game.id}/vote`, {
+        method: "POST",
+      });
+
+      if (response.ok) {
+        onVoteChange();
+      } else {
+        const data = await response.json();
+        console.error("Vote error:", data.error);
+      }
+    } catch (err) {
+      console.error("Vote error:", err);
+    } finally {
+      setVoting(false);
+    }
+  }
+
   return (
     <div className="flex gap-3 rounded-lg border border-zinc-200 bg-white p-3 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+      {/* Game cover */}
       {game.cover_url ? (
+        // eslint-disable-next-line @next/next/no-img-element
         <img
           src={game.cover_url}
           alt={`${game.title} cover`}
@@ -92,13 +142,43 @@ function GameCard({ game }: { game: PollGame }) {
         </div>
       )}
 
-      <div className="flex flex-col justify-center">
+      {/* Game info and voting */}
+      <div className="flex flex-1 flex-col justify-between">
         <h3 className="font-medium text-zinc-900 dark:text-zinc-50">
           {game.title}
         </h3>
-        <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-500">
-          (Voting coming soon)
-        </p>
+
+        {/* Voters list */}
+        {game.vote_count > 0 && (
+          <p className="text-xs text-zinc-500 dark:text-zinc-500">
+            {game.voters.map((v) => v.username).join(", ")}
+          </p>
+        )}
+
+        {/* Vote section */}
+        <div className="mt-2 flex items-center gap-2">
+          {currentUserId ? (
+            <button
+              type="button"
+              onClick={handleVote}
+              disabled={voting}
+              className={`rounded px-3 py-1 text-sm font-medium transition-colors ${
+                hasVoted
+                  ? "bg-green-100 text-green-700 hover:bg-green-200 dark:bg-green-900 dark:text-green-300 dark:hover:bg-green-800"
+                  : "bg-zinc-100 text-zinc-700 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700"
+              } disabled:cursor-not-allowed disabled:opacity-50`}
+            >
+              {voting ? "..." : hasVoted ? "Voted" : "Vote"}
+            </button>
+          ) : (
+            <span className="text-sm italic text-zinc-400 dark:text-zinc-500">
+              Log in to vote
+            </span>
+          )}
+          <span className="text-sm text-zinc-600 dark:text-zinc-400">
+            {game.vote_count} {game.vote_count === 1 ? "vote" : "votes"}
+          </span>
+        </div>
       </div>
     </div>
   );
