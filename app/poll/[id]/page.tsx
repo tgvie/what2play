@@ -3,6 +3,7 @@ import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import { createServerClient } from "@/utils/supabase/server";
 import CopyButton from "./CopyButton";
+import PollGamesSection from "./PollGamesSection";
 
 // Type definitions for poll data
 type PollCreator = {
@@ -18,7 +19,7 @@ type PollGame = {
   created_at: string;
 };
 
-// Displays poll details, games list, and shareable link
+// Displays poll details, games list, shareable link, search and add
 export default async function PollPage({
   params,
 }: {
@@ -71,7 +72,7 @@ export default async function PollPage({
     year: "numeric",
   });
 
-  // Extract creator from profiles (Supabase may return array or single object)
+  // Extract creator from profiles
   const profilesData = poll.profiles;
   const creator: PollCreator | null = Array.isArray(profilesData)
     ? profilesData[0] || null
@@ -116,34 +117,8 @@ export default async function PollPage({
           </div>
         </div>
 
-        {/* Games List Section */}
-        <div className="mb-6">
-          <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-50">
-              Game Suggestions ({pollGames.length})
-            </h2>
-            {/* Add game button will go here later */}
-          </div>
-
-          {pollGames.length === 0 ? (
-            // Empty state
-            <div className="rounded-lg border border-dashed border-zinc-300 bg-zinc-50 p-8 text-center dark:border-zinc-700 dark:bg-zinc-900/50">
-              <p className="text-zinc-500 dark:text-zinc-500">
-                No games suggested yet. Be the first to add one!
-              </p>
-              <p className="mt-2 text-sm text-zinc-400 dark:text-zinc-600">
-                (Game search coming soon)
-              </p>
-            </div>
-          ) : (
-            // Games grid
-            <div className="grid gap-4 sm:grid-cols-2">
-              {pollGames.map((game) => (
-                <GameCard key={game.id} game={game} />
-              ))}
-            </div>
-          )}
-        </div>
+        {/* Games Section -> client component with add functionality */}
+        <PollGamesSection pollId={id} initialGames={pollGames} />
 
         {/* Navigation */}
         <div className="flex justify-center gap-4 border-t border-zinc-200 pt-6 dark:border-zinc-800">
@@ -161,38 +136,6 @@ export default async function PollPage({
           </Link>
         </div>
       </main>
-    </div>
-  );
-}
-
-// Game card component for displaying a suggested game
-function GameCard({ game }: { game: PollGame }) {
-  return (
-    <div className="flex gap-3 rounded-lg border border-zinc-200 bg-white p-3 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
-      {/* Game cover image */}
-      {game.cover_url ? (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
-          src={game.cover_url}
-          alt={`${game.title} cover`}
-          className="h-20 w-14 shrink-0 rounded object-cover"
-        />
-      ) : (
-        <div className="flex h-20 w-14 shrink-0 items-center justify-center rounded bg-zinc-200 dark:bg-zinc-700">
-          <span className="text-xs text-zinc-400">No img</span>
-        </div>
-      )}
-
-      {/* Game info */}
-      <div className="flex flex-col justify-center">
-        <h3 className="font-medium text-zinc-900 dark:text-zinc-50">
-          {game.title}
-        </h3>
-        {/* Vote count and button will go here later */}
-        <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-500">
-          (Voting coming soon)
-        </p>
-      </div>
     </div>
   );
 }
