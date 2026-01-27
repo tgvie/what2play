@@ -4,26 +4,19 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
-/**
- * Login/Signup page
- * Authenticate with email/password
- * Toggles between login and signup modes
- */
+// Login/Signup page -> username + password only
 export default function LoginPage() {
   const router = useRouter();
   
   // Form state
   const [isSignup, setIsSignup] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
-  /**
-   * Handles form submission for login and signup
-   */
+  // Handles form submission for login and signup
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError("");
@@ -32,9 +25,7 @@ export default function LoginPage() {
 
     try {
       const endpoint = isSignup ? "/api/auth/signup" : "/api/auth/login";
-      const body = isSignup 
-        ? { email, password, username }
-        : { email, password };
+      const body = { username, password };
 
       const response = await fetch(endpoint, {
         method: "POST",
@@ -49,7 +40,7 @@ export default function LoginPage() {
         return;
       }
 
-      // Show success message if email confirmation needed
+      // Show success message if needed
       if (data.message && !data.user) {
         setMessage(data.message);
         return;
@@ -66,10 +57,7 @@ export default function LoginPage() {
     }
   }
 
-  /**
-   * Toggles between login and signup modes
-   * Clears existing errors/messages
-   */
+  // Toggles between login and signup modes
   function toggleMode() {
     setIsSignup(!isSignup);
     setError("");
@@ -94,46 +82,30 @@ export default function LoginPage() {
           onSubmit={handleSubmit}
           className="rounded-lg border border-zinc-800 bg-zinc-900 p-6 shadow-sm"
         >
-          {/* Username input - only shown in signup mode */}
-          {isSignup && (
-            <div className="mb-4">
-              <label 
-                htmlFor="username"
-                className="mb-2 block text-sm font-medium text-zinc-300"
-              >
-                Username
-              </label>
-              <input
-                id="username"
-                type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                placeholder="Choose a username"
-                minLength={3}
-                maxLength={20}
-                required={isSignup}
-                className="w-full rounded-md border border-zinc-700 bg-zinc-800 px-4 py-2 text-zinc-50 placeholder-zinc-500 focus:border-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-500/20"
-              />
-            </div>
-          )}
-
-          {/* Email input */}
+          {/* Username input */}
           <div className="mb-4">
             <label 
-              htmlFor="email"
+              htmlFor="username"
               className="mb-2 block text-sm font-medium text-zinc-300"
             >
-              Email
+              Username
             </label>
             <input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@example.com"
+              id="username"
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder={isSignup ? "Choose a username" : "Enter your username"}
+              minLength={3}
+              maxLength={20}
               required
               className="w-full rounded-md border border-zinc-700 bg-zinc-800 px-4 py-2 text-zinc-50 placeholder-zinc-500 focus:border-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-500/20"
             />
+            {isSignup && (
+              <p className="mt-1 text-xs text-zinc-500">
+                3-20 characters, letters, numbers, and underscores only
+              </p>
+            )}
           </div>
 
           {/* Password input */}
@@ -154,6 +126,11 @@ export default function LoginPage() {
               required
               className="w-full rounded-md border border-zinc-700 bg-zinc-800 px-4 py-2 text-zinc-50 placeholder-zinc-500 focus:border-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-500/20"
             />
+            {isSignup && (
+              <p className="mt-1 text-xs text-zinc-500">
+                At least 6 characters
+              </p>
+            )}
           </div>
 
           {/* Error message */}
@@ -166,7 +143,7 @@ export default function LoginPage() {
             </div>
           )}
 
-          {/* Success message (for email confirmation) */}
+          {/* Success message */}
           {message && (
             <div 
               role="status"

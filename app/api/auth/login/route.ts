@@ -1,23 +1,26 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createAnonClient } from "@/utils/supabase/server";
 
-/**
- * POST /api/auth/login
- * Authenticates user with email and password.
- * Sets session tokens in httpOnly cookies.
- */
+// Convert username to internal email format
+function usernameToEmail(username: string): string {
+  return `${username.toLowerCase()}@what2play.local`;
+}
+
+// POST /api/auth/login -> Authenticate with username + password
 export async function POST(request: NextRequest) {
   try {
-    const { email, password } = await request.json();
+    const { username, password } = await request.json();
 
-    // Validate required fields
-    if (!email || !password) {
+    // Validate required inputs
+    if (!username || !password) {
       return NextResponse.json(
-        { error: "Email and password are required" },
+        { error: "Username and password are required" },
         { status: 400 }
       );
     }
 
+    // Convert username to internal email format
+    const email = usernameToEmail(username);
     const supabase = createAnonClient();
 
     // Attempt to sign in
@@ -27,7 +30,11 @@ export async function POST(request: NextRequest) {
     });
 
     if (error) {
-      return NextResponse.json({ error: error.message }, { status: 401 });
+      // Return generic error to avoid revealing if username exists
+      return NextResponse.json(
+        { error: "Invalid username or password" },
+        { status: 401 }
+      );
     }
 
     // Build response with user data
@@ -36,8 +43,7 @@ export async function POST(request: NextRequest) {
         message: "Login successful",
         user: {
           id: data.user.id,
-          email: data.user.email,
-          username: data.user.user_metadata?.username || null,
+          username: data.user.user_metadata?.username || username,
         },
       },
       { status: 200 }
@@ -48,7 +54,7 @@ export async function POST(request: NextRequest) {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
-      maxAge: 60 * 60, // 1 hour
+      maxAge: 60 * 60,
       path: "/",
     });
 
@@ -56,7 +62,7 @@ export async function POST(request: NextRequest) {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
-      maxAge: 60 * 60 * 24 * 7, // 7 days
+      maxAge: 60 * 60 * 24 * 7,
       path: "/",
     });
 

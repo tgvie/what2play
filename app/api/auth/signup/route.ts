@@ -1,15 +1,29 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createAnonClient, createServerClient } from "@/utils/supabase/server";
 
-// POST /api/auth/signup -> Register new user and create profile
+// Convert username to internal email format
+function usernameToEmail(username: string): string {
+  return `${username.toLowerCase()}@what2play.local`;
+}
+
+// POST /api/auth/signup -> Register new user with username + password
 export async function POST(request: NextRequest) {
   try {
-    const { email, password, username } = await request.json();
+    const { username, password } = await request.json();
 
-    // Validate required fields
-    if (!email || !password || !username) {
+    // Validate required inputs
+    if (!username || !password) {
       return NextResponse.json(
-        { error: "Email, password, and username are required" },
+        { error: "Username and password are required" },
+        { status: 400 }
+      );
+    }
+
+    // Validate username format (alphanumeric and underscores only)
+    const usernameRegex = /^[a-zA-Z0-9_]+$/;
+    if (!usernameRegex.test(username)) {
+      return NextResponse.json(
+        { error: "Username can only contain letters, numbers, and underscores" },
         { status: 400 }
       );
     }
@@ -22,6 +36,31 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Validate password length
+    if (password.length < 6) {
+      return NextResponse.json(
+        { error: "Password must be at least 6 characters" },
+        { status: 400 }
+      );
+    }
+
+    // Check if username already exists in profiles table
+    const serverClient = createServerClient();
+    const { data: existingProfile } = await serverClient
+      .from("profiles")
+      .select("username")
+      .ilike("username", username)
+      .single();
+
+    if (existingProfile) {
+      return NextResponse.json(
+        { error: "Username already taken" },
+        { status: 400 }
+      );
+    }
+
+    // Generate internal email from username
+    const email = usernameToEmail(username);
     const supabase = createAnonClient();
 
     // Create user in Supabase Auth
@@ -34,12 +73,18 @@ export async function POST(request: NextRequest) {
     });
 
     if (authError) {
+      // Handle duplicate email (username already exists in auth)
+      if (authError.message.includes("already registered")) {
+        return NextResponse.json(
+          { error: "Username already taken" },
+          { status: 400 }
+        );
+      }
       return NextResponse.json({ error: authError.message }, { status: 400 });
     }
 
     // When user is created, also create a profile entry
     if (authData.user) {
-      const serverClient = createServerClient();
       const { error: profileError } = await serverClient
         .from("profiles")
         .insert({
@@ -49,8 +94,6 @@ export async function POST(request: NextRequest) {
 
       if (profileError) {
         console.error("Profile creation error:", profileError);
-        // Profile creation failed BUT user exists in auth
-        // Continue anyway since auth succeeded
       }
     }
 
@@ -61,7 +104,6 @@ export async function POST(request: NextRequest) {
           message: "Signup successful",
           user: {
             id: authData.user?.id,
-            email: authData.user?.email,
             username: username,
           },
         },
@@ -88,10 +130,13 @@ export async function POST(request: NextRequest) {
       return response;
     }
 
-    // If no session (email confirmation required), let user know
+    // If no session, signup succeeded
     return NextResponse.json(
-      { message: "Please check your email to confirm your account" },
-      { status: 200 }
+      {
+        message: "Account created successfully",
+        user: { username },
+      },
+      { status: 201 }
     );
   } catch (error) {
     console.error("Signup error:", error);
