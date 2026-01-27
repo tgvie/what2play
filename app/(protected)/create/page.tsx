@@ -48,7 +48,7 @@ export default function CreatePollPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-black px-4">
+    <div className="flex min-h-screen items-center justify-center px-4">
       <main className="w-full max-w-lg">
         {/* Header */}
         <div className="mb-8 text-center">

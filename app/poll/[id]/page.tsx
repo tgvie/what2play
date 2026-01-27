@@ -133,7 +133,7 @@ export default async function PollPage({
   });
 
   return (
-    <div className="min-h-screen bg-black px-4 py-8">
+    <div className="min-h-screen px-4 py-8">
       <main className="mx-auto w-full max-w-2xl">
         {/* Poll Header */}
         <div className="mb-6">

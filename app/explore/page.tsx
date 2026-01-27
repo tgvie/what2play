@@ -28,7 +28,7 @@ export default function ExplorePage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-black px-4 py-8">
+    <div className="min-h-screen px-4 py-8">
       <main className="mx-auto w-full max-w-4xl">
         {/* Header */}
         <div className="mb-8 text-center">

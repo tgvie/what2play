@@ -3,7 +3,7 @@ import Link from "next/link";
 // 404 page for when a poll is not found
 export default function PollNotFound() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-black px-4">
+    <div className="flex min-h-screen items-center justify-center px-4">
       <main className="w-full max-w-lg text-center">
         <h1 className="mb-4 text-6xl font-bold text-zinc-700">
           404

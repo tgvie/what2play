@@ -11,7 +11,7 @@ export default async function Home() {
   const isLoggedIn = !!cookieStore.get("access_token")?.value;
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-black px-4">
+    <div className="flex min-h-screen items-center justify-center px-4">
       <main className="w-full max-w-lg text-center">
         {/* Logo/Title */}
         <h1 className="mb-4 text-5xl font-bold tracking-tight text-zinc-50">
