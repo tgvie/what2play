@@ -133,21 +133,21 @@ export default async function PollPage({
   });
 
   return (
-    <div className="min-h-screen bg-zinc-50 px-4 py-8 dark:bg-black">
+    <div className="min-h-screen bg-black px-4 py-8">
       <main className="mx-auto w-full max-w-2xl">
         {/* Poll Header */}
         <div className="mb-6">
-          <h1 className="text-3xl font-bold text-zinc-900 dark:text-zinc-50">
+          <h1 className="text-3xl font-bold text-zinc-50">
             {poll.title}
           </h1>
           {poll.description && (
-            <p className="mt-2 text-zinc-600 dark:text-zinc-400">
+            <p className="mt-2 text-zinc-400">
               {poll.description}
             </p>
           )}
-          <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-500">
+          <p className="mt-2 text-sm text-zinc-500">
             Created by{" "}
-            <span className="font-medium text-zinc-700 dark:text-zinc-300">
+            <span className="font-medium text-zinc-300">
               {creator?.username || "Unknown"}
             </span>{" "}
             on {createdDate}
@@ -155,8 +155,8 @@ export default async function PollPage({
         </div>
 
         {/* Shareable Link Card */}
-        <div className="mb-6 rounded-lg border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
-          <label className="mb-2 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
+        <div className="mb-6 rounded-lg border border-zinc-800 bg-zinc-900 p-4 shadow-sm">
+          <label className="mb-2 block text-sm font-medium text-zinc-300">
             Share this poll
           </label>
           <div className="flex items-center gap-2">
@@ -164,7 +164,7 @@ export default async function PollPage({
               type="text"
               value={shareableUrl}
               readOnly
-              className="w-full rounded-md border border-zinc-300 bg-zinc-50 px-3 py-2 text-sm text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-50"
+              className="w-full rounded-md border border-zinc-700 bg-zinc-800 px-3 py-2 text-sm text-zinc-50"
             />
             <CopyButton url={shareableUrl} />
           </div>
@@ -178,16 +178,16 @@ export default async function PollPage({
         />
 
         {/* Navigation */}
-        <div className="flex justify-center gap-4 border-t border-zinc-200 pt-6 dark:border-zinc-800">
+        <div className="flex justify-center gap-4 border-t border-zinc-800 pt-6">
           <Link
             href="/create"
-            className="text-sm text-zinc-600 underline underline-offset-4 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50"
+            className="text-sm text-zinc-400 underline underline-offset-4 hover:text-zinc-50"
           >
             Create another poll
           </Link>
           <Link
             href="/"
-            className="text-sm text-zinc-600 underline underline-offset-4 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50"
+            className="text-sm text-zinc-400 underline underline-offset-4 hover:text-zinc-50"
           >
             Back to home
           </Link>

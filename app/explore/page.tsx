@@ -28,14 +28,14 @@ export default function ExplorePage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-zinc-50 px-4 py-8 dark:bg-black">
+    <div className="min-h-screen bg-black px-4 py-8">
       <main className="mx-auto w-full max-w-4xl">
         {/* Header */}
         <div className="mb-8 text-center">
-          <h1 className="text-3xl font-bold text-zinc-900 dark:text-zinc-50">
+          <h1 className="text-3xl font-bold text-zinc-50">
             Explore Games
           </h1>
-          <p className="mt-2 text-zinc-600 dark:text-zinc-400">
+          <p className="mt-2 text-zinc-400">
             Search and discover games from the IGDB database
           </p>
         </div>
@@ -46,17 +46,17 @@ export default function ExplorePage() {
         {/* Random Games Section */}
         <div className="mt-8">
           <div className="mb-4">
-            <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">
+            <h2 className="text-lg font-semibold text-zinc-50">
               Discover Games
             </h2>
-            <p className="text-sm text-zinc-500 dark:text-zinc-500">
+            <p className="text-sm text-zinc-500">
               Refresh (F5) this page to see different game suggestions
             </p>
           </div>
 
           {loadingRandom ? (
             <div className="flex justify-center py-8">
-              <div className="h-6 w-6 animate-spin rounded-full border-2 border-zinc-300 border-t-zinc-600 dark:border-zinc-600 dark:border-t-zinc-300" />
+              <div className="h-6 w-6 animate-spin rounded-full border-2 border-zinc-600 border-t-zinc-300" />
             </div>
           ) : randomGames.length > 0 ? (
             <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 lg:grid-cols-5">
@@ -73,7 +73,7 @@ export default function ExplorePage() {
         <div className="mt-8 text-center">
           <Link
             href="/"
-            className="text-sm text-zinc-500 hover:text-zinc-700 dark:text-zinc-500 dark:hover:text-zinc-300"
+            className="text-sm text-zinc-500 hover:text-zinc-300"
           >
             ← Back to home
           </Link>
@@ -86,7 +86,7 @@ export default function ExplorePage() {
 // Game card for random games grid
 function RandomGameCard({ game }: { game: Game }) {
   return (
-    <div className="group overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-sm transition-shadow hover:shadow-md dark:border-zinc-800 dark:bg-zinc-900">
+    <div className="group overflow-hidden rounded-lg border border-zinc-800 bg-zinc-900 shadow-sm transition-shadow hover:shadow-md">
       {game.cover_url ? (
         <img
           src={game.cover_url}
@@ -94,12 +94,12 @@ function RandomGameCard({ game }: { game: Game }) {
           className="aspect-3/4 w-full object-cover"
         />
       ) : (
-        <div className="flex aspect-3/4 w-full items-center justify-center bg-zinc-200 dark:bg-zinc-700">
+        <div className="flex aspect-3/4 w-full items-center justify-center bg-zinc-700">
           <span className="text-xs text-zinc-400">No img</span>
         </div>
       )}
       <div className="p-3">
-        <h3 className="text-sm font-medium leading-tight text-zinc-900 dark:text-zinc-50">
+        <h3 className="text-sm font-medium leading-tight text-zinc-50">
           {game.title}
         </h3>
         {game.release_year && (

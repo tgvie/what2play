@@ -90,19 +90,19 @@ export default function GameExplorer({
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder={placeholder}
-          className="w-full rounded-lg border border-zinc-300 bg-white px-4 py-3 pr-10 text-zinc-900 placeholder-zinc-400 focus:border-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-500/20 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-50 dark:placeholder-zinc-500"
+          className="w-full rounded-lg border border-zinc-700 bg-zinc-800 px-4 py-3 pr-10 text-zinc-50 placeholder-zinc-500 focus:border-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-500/20"
           aria-label="Search games"
         />
         {loading && (
           <div className="absolute right-3 top-1/2 -translate-y-1/2">
-            <div className="h-5 w-5 animate-spin rounded-full border-2 border-zinc-300 border-t-zinc-600 dark:border-zinc-600 dark:border-t-zinc-300" />
+            <div className="h-5 w-5 animate-spin rounded-full border-2 border-zinc-600 border-t-zinc-300" />
           </div>
         )}
       </div>
 
       {/* Error message */}
       {error && (
-        <p className="mt-2 text-sm text-red-600 dark:text-red-400">{error}</p>
+        <p className="mt-2 text-sm text-red-400">{error}</p>
       )}
 
       {/* Search results */}
@@ -122,7 +122,7 @@ export default function GameExplorer({
 
       {/* No results message */}
       {hasSearched && games.length === 0 && !loading && !error && (
-        <p className="mt-4 text-center text-zinc-500 dark:text-zinc-500">
+        <p className="mt-4 text-center text-zinc-500">
           No games found for &quot;{query}&quot;
         </p>
       )}
@@ -143,7 +143,7 @@ function GameCard({
   addButtonLabel: string;
 }) {
   return (
-    <div className="flex gap-4 rounded-lg border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+    <div className="flex gap-4 rounded-lg border border-zinc-800 bg-zinc-900 p-4 shadow-sm">
       {/* Game cover */}
       {game.cover_url ? (
         <img
@@ -152,14 +152,14 @@ function GameCard({
           className="h-24 w-16 shrink-0 rounded object-cover"
         />
       ) : (
-        <div className="flex h-24 w-16 shrink-0 items-center justify-center rounded bg-zinc-200 dark:bg-zinc-700">
+        <div className="flex h-24 w-16 shrink-0 items-center justify-center rounded bg-zinc-700">
           <span className="text-xs text-zinc-400">No img</span>
         </div>
       )}
 
       {/* Game info */}
       <div className="flex flex-1 flex-col justify-center">
-        <h3 className="font-medium text-zinc-900 dark:text-zinc-50">
+        <h3 className="font-medium text-zinc-50">
           {game.title}
           {game.release_year && (
             <span className="ml-2 text-sm font-normal text-zinc-500">
@@ -168,7 +168,7 @@ function GameCard({
           )}
         </h3>
         {game.summary && (
-          <p className="mt-1 line-clamp-2 text-sm text-zinc-600 dark:text-zinc-400">
+          <p className="mt-1 line-clamp-2 text-sm text-zinc-400">
             {game.summary}
           </p>
         )}
@@ -180,7 +180,7 @@ function GameCard({
           <button
             type="button"
             onClick={() => onSelect(game)}
-            className="shrink-0 rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:bg-zinc-50 dark:text-zinc-900 dark:hover:bg-zinc-200"
+            className="shrink-0 rounded-md bg-zinc-50 px-4 py-2 text-sm font-medium text-zinc-900 transition-colors hover:bg-zinc-200 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2"
           >
             {addButtonLabel}
           </button>

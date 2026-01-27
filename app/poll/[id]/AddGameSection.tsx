@@ -54,22 +54,22 @@ export default function AddGameSection({ pollId, onGameAdded }: AddGameSectionPr
   }
 
   return (
-    <div className="mb-6 rounded-lg border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+    <div className="mb-6 rounded-lg border border-zinc-800 bg-zinc-900 p-4 shadow-sm">
       {/* Header */}
-      <h3 className="mb-4 font-semibold text-zinc-900 dark:text-zinc-50">
+      <h3 className="mb-4 font-semibold text-zinc-50">
         Search for a game to add
       </h3>
 
       {/* Success message */}
       {success && (
-        <div className="mb-4 rounded-md border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700 dark:border-green-900 dark:bg-green-950 dark:text-green-400">
+        <div className="mb-4 rounded-md border border-green-900 bg-green-950 px-4 py-3 text-sm text-green-400">
           {success}
         </div>
       )}
 
       {/* Error message */}
       {error && (
-        <div className="mb-4 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-900 dark:bg-red-950 dark:text-red-400">
+        <div className="mb-4 rounded-md border border-red-900 bg-red-950 px-4 py-3 text-sm text-red-400">
           {error}
         </div>
       )}

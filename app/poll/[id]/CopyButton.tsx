@@ -20,7 +20,7 @@ export default function CopyButton({ url }: { url: string }) {
     <button
       type="button"
       onClick={handleCopy}
-      className="shrink-0 rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:bg-zinc-50 dark:text-zinc-900 dark:hover:bg-zinc-200"
+      className="shrink-0 rounded-md bg-zinc-50 px-4 py-2 text-sm font-medium text-zinc-900 transition-colors hover:bg-zinc-200 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2"
     >
       {copied ? "Copied!" : "Copy"}
     </button>

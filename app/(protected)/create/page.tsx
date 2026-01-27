@@ -48,14 +48,14 @@ export default function CreatePollPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 px-4 dark:bg-black">
+    <div className="flex min-h-screen items-center justify-center bg-black px-4">
       <main className="w-full max-w-lg">
         {/* Header */}
         <div className="mb-8 text-center">
-          <h1 className="text-3xl font-bold text-zinc-900 dark:text-zinc-50">
+          <h1 className="text-3xl font-bold text-zinc-50">
             Create Poll
           </h1>
-          <p className="mt-2 text-zinc-600 dark:text-zinc-400">
+          <p className="mt-2 text-zinc-400">
             Start a new game poll and share it with your crew
           </p>
         </div>
@@ -63,13 +63,13 @@ export default function CreatePollPage() {
         {/* Poll Form */}
         <form
           onSubmit={handleSubmit}
-          className="rounded-lg border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900"
+          className="rounded-lg border border-zinc-800 bg-zinc-900 p-6 shadow-sm"
         >
           {/* Title input */}
           <div className="mb-4">
             <label
               htmlFor="title"
-              className="mb-2 block text-sm font-medium text-zinc-700 dark:text-zinc-300"
+              className="mb-2 block text-sm font-medium text-zinc-300"
             >
               Poll Title <span className="text-red-500">*</span>
             </label>
@@ -81,9 +81,9 @@ export default function CreatePollPage() {
               placeholder="What should we play this weekend?"
               maxLength={100}
               required
-              className="w-full rounded-md border border-zinc-300 bg-white px-4 py-2 text-zinc-900 placeholder-zinc-400 focus:border-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-500/20 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-50 dark:placeholder-zinc-500"
+              className="w-full rounded-md border border-zinc-700 bg-zinc-800 px-4 py-2 text-zinc-50 placeholder-zinc-500 focus:border-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-500/20"
             />
-            <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-500">
+            <p className="mt-1 text-xs text-zinc-500">
               {title.length}/100 characters
             </p>
           </div>
@@ -92,7 +92,7 @@ export default function CreatePollPage() {
           <div className="mb-6">
             <label
               htmlFor="description"
-              className="mb-2 block text-sm font-medium text-zinc-700 dark:text-zinc-300"
+              className="mb-2 block text-sm font-medium text-zinc-300"
             >
               Description <span className="text-zinc-400">(optional)</span>
             </label>
@@ -103,9 +103,9 @@ export default function CreatePollPage() {
               placeholder="Add some context for your crew..."
               maxLength={500}
               rows={3}
-              className="w-full resize-none rounded-md border border-zinc-300 bg-white px-4 py-2 text-zinc-900 placeholder-zinc-400 focus:border-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-500/20 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-50 dark:placeholder-zinc-500"
+              className="w-full resize-none rounded-md border border-zinc-700 bg-zinc-800 px-4 py-2 text-zinc-50 placeholder-zinc-500 focus:border-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-500/20"
             />
-            <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-500">
+            <p className="mt-1 text-xs text-zinc-500">
               {description.length}/500 characters
             </p>
           </div>
@@ -114,7 +114,7 @@ export default function CreatePollPage() {
           {error && (
             <div
               role="alert"
-              className="mb-4 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-900 dark:bg-red-950 dark:text-red-400"
+              className="mb-4 rounded-md border border-red-900 bg-red-950 px-4 py-3 text-sm text-red-400"
             >
               {error}
             </div>
@@ -124,7 +124,7 @@ export default function CreatePollPage() {
           <button
             type="submit"
             disabled={loading || !title.trim()}
-            className="w-full rounded-md bg-zinc-900 px-4 py-3 font-medium text-white transition-colors hover:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-50 dark:text-zinc-900 dark:hover:bg-zinc-200"
+            className="w-full rounded-md bg-zinc-50 px-4 py-3 font-medium text-zinc-900 transition-colors hover:bg-zinc-200 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {loading ? "Creating..." : "Create Poll"}
           </button>
@@ -134,7 +134,7 @@ export default function CreatePollPage() {
         <p className="mt-6 text-center">
           <Link
             href="/"
-            className="text-sm text-zinc-500 hover:text-zinc-700 dark:text-zinc-500 dark:hover:text-zinc-300"
+            className="text-sm text-zinc-500 hover:text-zinc-300"
           >
             ← Back to home
           </Link>

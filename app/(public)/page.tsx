@@ -10,13 +10,13 @@ export default async function Home() {
   const isLoggedIn = !!cookieStore.get("access_token")?.value;
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 px-4 dark:bg-black">
+    <div className="flex min-h-screen items-center justify-center bg-black px-4">
       <main className="w-full max-w-lg text-center">
         {/* Logo/Title */}
-        <h1 className="mb-4 text-5xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
+        <h1 className="mb-4 text-5xl font-bold tracking-tight text-zinc-50">
           what2play
         </h1>
-        <p className="mb-12 text-lg text-zinc-600 dark:text-zinc-400">
+        <p className="mb-12 text-lg text-zinc-400">
           Create polls, suggest games, and vote with your crew.
         </p>
 
@@ -25,7 +25,7 @@ export default async function Home() {
           {/* Create Poll (protected) */}
           <Link
             href="/create"
-            className="flex items-center justify-center gap-2 rounded-lg bg-zinc-900 px-6 py-4 text-lg font-medium text-white transition-colors hover:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:bg-zinc-50 dark:text-zinc-900 dark:hover:bg-zinc-200"
+            className="flex items-center justify-center gap-2 rounded-lg bg-zinc-50 px-6 py-4 text-lg font-medium text-zinc-900 transition-colors hover:bg-zinc-200 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2"
           >
             <span aria-hidden="true">+</span> Create Poll
           </Link>
@@ -33,7 +33,7 @@ export default async function Home() {
           {/* Poll History (protected) */}
           <Link
             href="/history"
-            className="flex items-center justify-center gap-2 rounded-lg border border-zinc-300 bg-white px-6 py-4 text-lg font-medium text-zinc-900 transition-colors hover:bg-zinc-50 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50 dark:hover:bg-zinc-800"
+            className="flex items-center justify-center gap-2 rounded-lg border border-zinc-700 bg-zinc-900 px-6 py-4 text-lg font-medium text-zinc-50 transition-colors hover:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2"
           >
             <span aria-hidden="true">📋</span> Poll History
           </Link>
@@ -41,20 +41,20 @@ export default async function Home() {
           {/* Explore Games (public) */}
           <Link
             href="/explore"
-            className="flex items-center justify-center gap-2 rounded-lg border border-zinc-300 bg-white px-6 py-4 text-lg font-medium text-zinc-900 transition-colors hover:bg-zinc-50 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50 dark:hover:bg-zinc-800"
+            className="flex items-center justify-center gap-2 rounded-lg border border-zinc-700 bg-zinc-900 px-6 py-4 text-lg font-medium text-zinc-50 transition-colors hover:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2"
           >
             <span aria-hidden="true">🎮</span> Explore Games
           </Link>
         </nav>
 
         {/* Sign in/Sign up */}
-        <div className="mt-8 border-t border-zinc-200 pt-8 dark:border-zinc-800">
+        <div className="mt-8 border-t border-zinc-800 pt-8">
           {isLoggedIn ? (
             <LogoutButton />
           ) : (
             <Link
               href="/login"
-              className="text-zinc-600 underline underline-offset-4 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50"
+              className="text-zinc-400 underline underline-offset-4 hover:text-zinc-50"
             >
               Sign in to your account
             </Link>
@@ -62,7 +62,7 @@ export default async function Home() {
         </div>
 
         {/* Users with poll link */}
-        <p className="mt-8 text-sm text-zinc-500 dark:text-zinc-500">
+        <p className="mt-8 text-sm text-zinc-500">
           Have a poll link? Just paste it in your browser to join!
         </p>
       </main>
@@ -78,7 +78,7 @@ function LogoutButton() {
     <form action="/api/auth/logout" method="POST">
       <button
         type="submit"
-        className="text-zinc-600 underline underline-offset-4 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50"
+        className="text-zinc-400 underline underline-offset-4 hover:text-zinc-50"
       >
         Sign out
       </button>
