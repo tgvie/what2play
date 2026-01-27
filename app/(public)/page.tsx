@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { cookies } from "next/headers";
+import LogoutButton from "@/components/LogoutButton";
 
 /**
  * HOME
@@ -70,18 +71,3 @@ export default async function Home() {
   );
 }
 
-/**
- * Logout button
- */
-function LogoutButton() {
-  return (
-    <form action="/api/auth/logout" method="POST">
-      <button
-        type="submit"
-        className="text-zinc-400 underline underline-offset-4 hover:text-zinc-50"
-      >
-        Sign out
-      </button>
-    </form>
-  );
-}
