@@ -146,6 +146,7 @@ function GameCard({
     <div className="flex gap-4 rounded-lg border border-zinc-800 bg-zinc-900 p-4 shadow-sm">
       {/* Game cover */}
       {game.cover_url ? (
+        // eslint-disable-next-line @next/next/no-img-element
         <img
           src={game.cover_url}
           alt={`${game.title} cover`}
