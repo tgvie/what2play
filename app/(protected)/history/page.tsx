@@ -65,7 +65,7 @@ export default function HistoryPage() {
       <main className="mx-auto w-full max-w-2xl">
         {/* Header */}
         <div className="mb-8 text-center">
-          <h1 className="text-3xl font-bold text-zinc-50">Poll History</h1>
+          <h1 className="text-3xl font-bold">Poll History</h1>
           <p className="mt-2 text-zinc-400">
             Your created polls and polls you&apos;ve participated in
           </p>
@@ -90,7 +90,7 @@ export default function HistoryPage() {
           <>
             {/* Created Polls section */}
             <section className="mb-8">
-              <h2 className="mb-4 text-lg font-semibold text-zinc-50">
+              <h2 className="mb-4 text-lg font-semibold">
                 Polls You Created ({createdPolls.length})
               </h2>
 
@@ -112,7 +112,7 @@ export default function HistoryPage() {
                       href={`/poll/${poll.id}`}
                       className="block rounded-lg border border-zinc-800 bg-zinc-900 p-4 transition-colors hover:border-zinc-700 hover:bg-zinc-800"
                     >
-                      <h3 className="font-medium text-zinc-50">{poll.title}</h3>
+                      <h3 className="font-medium">{poll.title}</h3>
                       {poll.description && (
                         <p className="mt-1 line-clamp-1 text-sm text-zinc-400">
                           {poll.description}
@@ -130,7 +130,7 @@ export default function HistoryPage() {
 
             {/* Participated Polls section */}
             <section className="mb-8">
-              <h2 className="mb-4 text-lg font-semibold text-zinc-50">
+              <h2 className="mb-4 text-lg font-semibold">
                 Other Polls You Voted In ({participatedPolls.length})
               </h2>
 
@@ -146,7 +146,7 @@ export default function HistoryPage() {
                       href={`/poll/${poll.id}`}
                       className="block rounded-lg border border-zinc-800 bg-zinc-900 p-4 transition-colors hover:border-zinc-700 hover:bg-zinc-800"
                     >
-                      <h3 className="font-medium text-zinc-50">{poll.title}</h3>
+                      <h3 className="font-medium">{poll.title}</h3>
                       {poll.description && (
                         <p className="mt-1 line-clamp-1 text-sm text-zinc-400">
                           {poll.description}

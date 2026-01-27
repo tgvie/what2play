@@ -32,7 +32,7 @@ export default function ExplorePage() {
       <main className="mx-auto w-full max-w-4xl">
         {/* Header */}
         <div className="mb-8 text-center">
-          <h1 className="text-3xl font-bold text-zinc-50">
+          <h1 className="text-3xl font-bold">
             Explore Games
           </h1>
           <p className="mt-2 text-zinc-400">
@@ -46,7 +46,7 @@ export default function ExplorePage() {
         {/* Random Games Section */}
         <div className="mt-8">
           <div className="mb-4">
-            <h2 className="text-lg font-semibold text-zinc-50">
+            <h2 className="text-lg font-semibold">
               Discover Games
             </h2>
             <p className="text-sm text-zinc-500">
@@ -99,7 +99,7 @@ function RandomGameCard({ game }: { game: Game }) {
         </div>
       )}
       <div className="p-3">
-        <h3 className="text-sm font-medium leading-tight text-zinc-50">
+        <h3 className="text-sm font-medium leading-tight">
           {game.title}
         </h3>
         {game.release_year && (

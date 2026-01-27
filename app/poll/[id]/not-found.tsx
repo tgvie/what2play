@@ -8,7 +8,7 @@ export default function PollNotFound() {
         <h1 className="mb-4 text-6xl font-bold text-zinc-700">
           404
         </h1>
-        <h2 className="mb-4 text-2xl font-semibold text-zinc-50">
+        <h2 className="mb-4 text-2xl font-semibold">
           Poll Not Found
         </h2>
         <p className="mb-8 text-zinc-400">

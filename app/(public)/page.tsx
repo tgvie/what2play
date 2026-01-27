@@ -14,7 +14,7 @@ export default async function Home() {
     <div className="flex min-h-screen items-center justify-center px-4">
       <main className="w-full max-w-lg text-center">
         {/* Logo/Title */}
-        <h1 className="mb-4 text-5xl font-bold tracking-tight text-zinc-50">
+        <h1 className="mb-4 text-5xl font-bold tracking-tight">
           what2play
         </h1>
         <p className="mb-12 text-lg text-zinc-400">

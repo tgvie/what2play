@@ -137,7 +137,7 @@ export default async function PollPage({
       <main className="mx-auto w-full max-w-2xl">
         {/* Poll Header */}
         <div className="mb-6">
-          <h1 className="text-3xl font-bold text-zinc-50">
+          <h1 className="text-3xl font-bold">
             {poll.title}
           </h1>
           {poll.description && (

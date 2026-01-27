@@ -69,7 +69,7 @@ export default function LoginPage() {
       <main className="w-full max-w-md">
         {/* Header */}
         <div className="mb-8 text-center">
-          <h1 className="text-3xl font-bold text-zinc-50">
+          <h1 className="text-3xl font-bold">
             what2play
           </h1>
           <p className="mt-2 text-zinc-400">

@@ -56,7 +56,7 @@ export default function AddGameSection({ pollId, onGameAdded }: AddGameSectionPr
   return (
     <div className="mb-6 rounded-lg border border-zinc-800 bg-zinc-900 p-4 shadow-sm">
       {/* Header */}
-      <h3 className="mb-4 font-semibold text-zinc-50">
+      <h3 className="mb-4 font-semibold">
         Search for a game to add
       </h3>
 

@@ -52,7 +52,7 @@ export default function PollGamesSection({
 
       {/* Games List Header */}
       <div className="mb-4">
-        <h2 className="text-xl font-semibold text-zinc-50">
+        <h2 className="text-xl font-semibold">
           Game Suggestions ({games.length})
         </h2>
         <p className="mt-1 text-sm text-zinc-500">
@@ -155,7 +155,7 @@ function GameCard({
 
       {/* Game info and voting */}
       <div className="flex flex-1 flex-col justify-between">
-        <h3 className="font-medium text-zinc-50">
+        <h3 className="font-medium">
           {game.title}
         </h3>
 
