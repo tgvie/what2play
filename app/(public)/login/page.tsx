@@ -81,7 +81,8 @@ export default function LoginPage() {
         {/* Auth Form */}
         <form
           onSubmit={handleSubmit}
-          className="rounded-xl border border-white/10 bg-white/5 p-6 backdrop-blur-lg"
+          className="rounded-xl border border-white/10 p-6 shadow-[0_4px_30px_rgba(0,0,0,0.1)] backdrop-blur-[2.2px]"
+          style={{ background: "rgba(255, 255, 255, 0.03)" }}
         >
           {/* Username input */}
           <div className="mb-4">

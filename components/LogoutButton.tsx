@@ -49,7 +49,8 @@ export default function LogoutButton() {
           onClick={() => setShowModal(false)}
         >
           <div
-            className="w-full max-w-sm rounded-xl border border-white/10 bg-surface/95 p-6 shadow-2xl backdrop-blur-lg"
+            className="w-full max-w-sm rounded-xl border border-white/10 p-6 shadow-[0_4px_30px_rgba(0,0,0,0.1)] backdrop-blur-[2.2px]"
+            style={{ background: "rgba(255, 255, 255, 0.03)" }}
             onClick={(e) => e.stopPropagation()}
           >
             <h2 className="mb-2 text-base font-semibold text-primary">

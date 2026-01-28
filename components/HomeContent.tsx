@@ -79,7 +79,7 @@ export default function HomeContent({ isLoggedIn }: HomeContentProps) {
   return (
     <div className="flex min-h-screen flex-col px-4">
       <main className="flex flex-1 items-center justify-center">
-        {/* Flex container for main content + login panel */}
+        {/* Container for main content + login panel */}
         <div className="flex items-center gap-0">
           {/* Main content */}
           <div className="w-full max-w-lg text-center transition-all duration-300">
@@ -93,26 +93,32 @@ export default function HomeContent({ isLoggedIn }: HomeContentProps) {
             <nav className="grid grid-cols-2 gap-4" aria-label="Main navigation">
               <Link
                 href="/create"
-                className="group flex flex-col items-center gap-3 rounded-xl border border-white/10 bg-white/5 px-4 py-6 backdrop-blur-lg transition-all hover:border-pink/50 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-pink/50"
+                className="group relative flex flex-col items-center gap-3 overflow-hidden rounded-xl border border-white/10 px-4 py-6 shadow-[0_4px_30px_rgba(0,0,0,0.1)] backdrop-blur-[2.2px] transition-all hover:border-pink/50 focus:outline-none focus:ring-2 focus:ring-pink/50"
+                style={{ background: "rgba(255, 255, 255, 0.03)" }}
               >
-                <PlusCircle className="h-8 w-8 text-pink" />
-                <span className="text-sm font-medium">Create Poll</span>
+                <span className="absolute inset-0 bg-white/0 transition-colors group-hover:bg-white/5" />
+                <PlusCircle className="relative h-8 w-8 text-pink" />
+                <span className="relative text-sm font-medium">Create Poll</span>
               </Link>
 
               <Link
                 href="/history"
-                className="group flex flex-col items-center gap-3 rounded-xl border border-white/10 bg-white/5 px-4 py-6 backdrop-blur-lg transition-all hover:border-pink/50 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-pink/50"
+                className="group relative flex flex-col items-center gap-3 overflow-hidden rounded-xl border border-white/10 px-4 py-6 shadow-[0_4px_30px_rgba(0,0,0,0.1)] backdrop-blur-[2.2px] transition-all hover:border-pink/50 focus:outline-none focus:ring-2 focus:ring-pink/50"
+                style={{ background: "rgba(255, 255, 255, 0.03)" }}
               >
-                <History className="h-8 w-8 text-pink" />
-                <span className="text-sm font-medium">Poll History</span>
+                <span className="absolute inset-0 bg-white/0 transition-colors group-hover:bg-white/5" />
+                <History className="relative h-8 w-8 text-pink" />
+                <span className="relative text-sm font-medium">Poll History</span>
               </Link>
 
               <Link
                 href="/explore"
-                className="group col-span-2 flex flex-col items-center gap-3 rounded-xl border border-white/10 bg-white/5 px-4 py-6 backdrop-blur-lg transition-all hover:border-pink/50 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-pink/50"
+                className="group relative col-span-2 flex flex-col items-center gap-3 overflow-hidden rounded-xl border border-white/10 px-4 py-6 shadow-[0_4px_30px_rgba(0,0,0,0.1)] backdrop-blur-[2.2px] transition-all hover:border-pink/50 focus:outline-none focus:ring-2 focus:ring-pink/50"
+                style={{ background: "rgba(255, 255, 255, 0.03)" }}
               >
-                <Gamepad2 className="h-8 w-8 text-pink" />
-                <span className="text-sm font-medium">Explore Games</span>
+                <span className="absolute inset-0 bg-white/0 transition-colors group-hover:bg-white/5" />
+                <Gamepad2 className="relative h-8 w-8 text-pink" />
+                <span className="relative text-sm font-medium">Explore Games</span>
               </Link>
             </nav>
 
@@ -141,17 +147,17 @@ export default function HomeContent({ isLoggedIn }: HomeContentProps) {
           {/* Divider + Login Panel */}
           <div
             className={`flex items-center overflow-hidden transition-all duration-300 ease-out ${
-              isPanelOpen ? "ml-8 mt-3 w-96 opacity-100" : "ml-0 w-0 opacity-0"
+              isPanelOpen ? "ml-8 mt-7 w-96 opacity-100" : "ml-0 w-0 opacity-0"
             }`}
           >
             {/* Vertical divider */}
-            <div className="h-[380px] border-l border-dashed border-white/20" />
+            <div className="h-[380px] border-l border-dashed border-white/10" />
 
-            {/* Login form - aligned with tagline */}
+            {/* Login form */}
             <div className="flex w-96 flex-col pl-8">
-              {/* Header - outside the card */}
+              {/* Header */}
               <div className="mb-4 flex w-full items-center justify-between">
-                <h3 className="text-xl font-semibold text-secondary">
+                <h3 className="text-xl font-semibold text-primary">
                   {isSignup ? "Create Account" : "Log In"}
                 </h3>
                 <button
@@ -163,8 +169,11 @@ export default function HomeContent({ isLoggedIn }: HomeContentProps) {
                 </button>
               </div>
 
-              {/* Form card - matches left content height */}
-              <div className="flex h-[240px] w-full flex-col rounded-xl border border-white/10 bg-white/5 p-4 backdrop-blur-lg">
+              {/* Form card */}
+              <div
+                className="flex h-[240px] w-full flex-col rounded-xl border border-white/10 p-4 shadow-[0_4px_30px_rgba(0,0,0,0.1)] backdrop-blur-[2.2px]"
+                style={{ background: "rgba(255, 255, 255, 0.03)" }}
+              >
                 <form onSubmit={handleSubmit} className="flex flex-1 flex-col">
                   <div className="mb-4">
                     <label htmlFor="username" className="mb-2 block text-sm font-medium text-secondary">
