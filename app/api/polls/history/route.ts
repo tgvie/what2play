@@ -82,7 +82,8 @@ export async function GET(request: NextRequest) {
 
     // Extract unique polls from votes (remove duplicates)
     const participatedMap = new Map();
-    (votedPolls || []).forEach((vote) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (votedPolls || []).forEach((vote: any) => {
       // Handle nested relations (can be array or single object)
       const pollGames = vote.poll_games;
       const pollGamesData = Array.isArray(pollGames) ? pollGames[0] : pollGames;

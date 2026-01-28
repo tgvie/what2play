@@ -1,6 +1,9 @@
 import Link from "next/link";
 import { cookies } from "next/headers";
 import LogoutButton from "@/components/LogoutButton";
+import Button from "@/components/Button";
+import { PlusCircle, History, Gamepad2, LogIn, Link2 } from "lucide-react";
+import Image from "next/image";
 
 /**
  * HOME
@@ -11,62 +14,78 @@ export default async function Home() {
   const isLoggedIn = !!cookieStore.get("access_token")?.value;
 
   return (
-    <div className="flex min-h-screen items-center justify-center px-4">
-      <main className="w-full max-w-lg text-center">
-        {/* Logo/Title */}
-        <h1 className="mb-4 text-5xl font-bold tracking-tight">
-          what2play
-        </h1>
-        <p className="mb-12 text-lg text-zinc-400">
-          Create polls, suggest games, and vote with your crew.
-        </p>
-
-        {/* Nav Links */}
-        <nav className="flex flex-col gap-4" aria-label="Main navigation">
-          {/* Create Poll (protected) */}
-          <Link
-            href="/create"
-            className="flex items-center justify-center gap-2 rounded-lg bg-zinc-50 px-6 py-4 text-lg font-medium text-zinc-900 transition-colors hover:bg-zinc-200 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2"
-          >
-            <span aria-hidden="true">+</span> Create Poll
+    <div className="flex min-h-screen flex-col px-4">
+      {/* Main content */}
+      <main className="flex flex-1 flex-col items-center justify-center">
+        <div className="w-full max-w-lg text-center">
+          {/* Logo */}
+          <Link href="/" className="mb-4 inline-block">
+            <Image
+              src="/img/what2play-text-logo.png"
+              alt="what2play"
+              width={280}
+              height={60}
+              priority
+              className="mx-auto"
+            />
           </Link>
+          <p className="mb-12 text-lg text-secondary">
+            Create polls, suggest games, and vote with your friends
+          </p>
 
-          {/* Poll History (protected) */}
-          <Link
-            href="/history"
-            className="flex items-center justify-center gap-2 rounded-lg border border-zinc-700 bg-zinc-900 px-6 py-4 text-lg font-medium text-zinc-50 transition-colors hover:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2"
-          >
-            <span aria-hidden="true">📋</span> Poll History
-          </Link>
-
-          {/* Explore Games (public) */}
-          <Link
-            href="/explore"
-            className="flex items-center justify-center gap-2 rounded-lg border border-zinc-700 bg-zinc-900 px-6 py-4 text-lg font-medium text-zinc-50 transition-colors hover:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2"
-          >
-            <span aria-hidden="true">🎮</span> Explore Games
-          </Link>
-        </nav>
-
-        {/* Sign in/Sign up */}
-        <div className="mt-8 border-t border-zinc-800 pt-8">
-          {isLoggedIn ? (
-            <LogoutButton />
-          ) : (
+          {/* Nav Links */}
+          <nav className="grid grid-cols-2 gap-4" aria-label="Main navigation">
+            {/* Create Poll */}
             <Link
-              href="/login"
-              className="text-zinc-400 underline underline-offset-4 hover:text-zinc-50"
+              href="/create"
+              className="group flex flex-col items-center gap-3 rounded-xl border border-white/10 bg-white/5 px-4 py-6 backdrop-blur-lg transition-all hover:border-pink/50 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-pink/50"
             >
-              Sign in to your account
+              <PlusCircle className="h-8 w-8 text-pink" />
+              <span className="text-sm font-medium">Create Poll</span>
             </Link>
-          )}
-        </div>
 
-        {/* Users with poll link */}
-        <p className="mt-8 text-sm text-zinc-500">
-          Have a poll link? Just paste it in your browser to join!
-        </p>
+            {/* Poll History */}
+            <Link
+              href="/history"
+              className="group flex flex-col items-center gap-3 rounded-xl border border-white/10 bg-white/5 px-4 py-6 backdrop-blur-lg transition-all hover:border-pink/50 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-pink/50"
+            >
+              <History className="h-8 w-8 text-pink" />
+              <span className="text-sm font-medium">Poll History</span>
+            </Link>
+
+            {/* Explore Games */}
+            <Link
+              href="/explore"
+              className="group col-span-2 flex flex-col items-center gap-3 rounded-xl border border-white/10 bg-white/5 px-4 py-6 backdrop-blur-lg transition-all hover:border-pink/50 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-pink/50"
+            >
+              <Gamepad2 className="h-8 w-8 text-pink" />
+              <span className="text-sm font-medium">Explore Games</span>
+            </Link>
+          </nav>
+
+          {/* Login + Poll link hint */}
+          <div className="mt-10 flex flex-col items-center gap-5">
+            {isLoggedIn ? (
+              <LogoutButton />
+            ) : (
+              <Button href="/login">
+                <LogIn className="h-5 w-5" />
+                <span>Log in</span>
+              </Button>
+            )}
+            
+            <div className="flex items-center gap-2 text-sm text-muted">
+              <Link2 className="h-5 w-5" />
+              <span>Have a poll link? Paste the link in your browser to join!</span>
+            </div>
+          </div>  
+        </div>
       </main>
+
+      {/* Footer */}
+      <footer className="py-4 px-2 text-right text-xs text-muted/70">
+        <p>© {new Date().getFullYear()} what2play</p>
+      </footer>
     </div>
   );
 }

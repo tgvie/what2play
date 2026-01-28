@@ -56,7 +56,7 @@ export default function CreatePollPage() {
             Create Poll
           </h1>
           <p className="mt-2 text-zinc-400">
-            Start a new game poll and share it with your crew
+            Start a new game poll and share it with your friends
           </p>
         </div>
 
@@ -100,7 +100,7 @@ export default function CreatePollPage() {
               id="description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder="Add some context for your crew..."
+              placeholder="Add some context for your friends..."
               maxLength={500}
               rows={3}
               className="w-full resize-none rounded-md border border-zinc-700 bg-zinc-800 px-4 py-2 text-zinc-50 placeholder-zinc-500 focus:border-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-500/20"
