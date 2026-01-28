@@ -3,10 +3,10 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import Image from "next/image";
 import { PlusCircle, History, Gamepad2, LogIn, Link2, X } from "lucide-react";
 import LogoutButton from "./LogoutButton";
 import Button from "./Button";
+import Logo from "./Logo";
 
 interface HomeContentProps {
   isLoggedIn: boolean;
@@ -84,16 +84,7 @@ export default function HomeContent({ isLoggedIn }: HomeContentProps) {
           {/* Main content */}
           <div className="w-full max-w-lg text-center transition-all duration-300">
             {/* Logo */}
-            <Link href="/" className="mb-4 inline-block">
-              <Image
-                src="/img/what2play-text-logo.png"
-                alt="what2play"
-                width={280}
-                height={60}
-                priority
-                className="mx-auto"
-              />
-            </Link>
+            <Logo />
             <p className="mb-12 text-lg text-secondary">
               Create polls, suggest games, and vote with your friends
             </p>
