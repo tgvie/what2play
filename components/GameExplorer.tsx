@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { X, Loader2 } from "lucide-react";
 
 // Game type matching IGDB response
 export type Game = {
@@ -17,6 +18,7 @@ type GameExplorerProps = {
   showAddButton?: boolean;
   addButtonLabel?: string;
   resetKey?: number;
+  addingGameId?: number | null;
 };
 
 // Reusable game search/explorer component with debounced input
@@ -26,6 +28,7 @@ export default function GameExplorer({
   showAddButton = false,
   addButtonLabel = "Add",
   resetKey = 0,
+  addingGameId = null,
 }: GameExplorerProps) {
   const [query, setQuery] = useState("");
   const [games, setGames] = useState<Game[]>([]);
@@ -81,6 +84,13 @@ export default function GameExplorer({
     return () => clearTimeout(timeoutId);
   }, [query]);
 
+  // Clear search input
+  const handleClear = () => {
+    setQuery("");
+    setGames([]);
+    setHasSearched(false);
+  };
+
   return (
     <div className="w-full">
       {/* Search input */}
@@ -90,14 +100,24 @@ export default function GameExplorer({
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder={placeholder}
-          className="w-full rounded-lg border border-zinc-700 bg-zinc-800 px-4 py-3 pr-10 text-zinc-50 placeholder-zinc-500 focus:border-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-500/20"
+          className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 pr-10 text-primary placeholder-muted focus:border-pink/50 focus:outline-none focus:ring-2 focus:ring-pink/20"
           aria-label="Search games"
         />
-        {loading && (
+        {/* Loading spinner/clear button */}
+        {loading ? (
           <div className="absolute right-3 top-1/2 -translate-y-1/2">
-            <div className="h-5 w-5 animate-spin rounded-full border-2 border-zinc-600 border-t-zinc-300" />
+            <Loader2 className="h-5 w-5 animate-spin text-muted" />
           </div>
-        )}
+        ) : query.length > 0 ? (
+          <button
+            type="button"
+            onClick={handleClear}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted transition-colors hover:text-primary"
+            aria-label="Clear search"
+          >
+            <X className="h-5 w-5" />
+          </button>
+        ) : null}
       </div>
 
       {/* Error message */}
@@ -115,6 +135,7 @@ export default function GameExplorer({
               onSelect={onGameSelect}
               showAddButton={showAddButton}
               addButtonLabel={addButtonLabel}
+              isAdding={addingGameId === game.igdb_id}
             />
           ))}
         </div>
@@ -122,7 +143,7 @@ export default function GameExplorer({
 
       {/* No results message */}
       {hasSearched && games.length === 0 && !loading && !error && (
-        <p className="mt-4 text-center text-zinc-500">
+        <p className="mt-4 text-center text-muted">
           No games found for &quot;{query}&quot;
         </p>
       )}
@@ -136,55 +157,61 @@ function GameCard({
   onSelect,
   showAddButton,
   addButtonLabel,
+  isAdding,
 }: {
   game: Game;
   onSelect?: (game: Game) => void;
   showAddButton: boolean;
   addButtonLabel: string;
+  isAdding: boolean;
 }) {
   return (
-    <div className="flex gap-4 rounded-lg border border-zinc-800 bg-zinc-900 p-4 shadow-sm">
+    <div className="flex gap-4 border-b border-white/5 py-4 last:border-b-0">
       {/* Game cover */}
       {game.cover_url ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img
           src={game.cover_url}
           alt={`${game.title} cover`}
-          className="h-24 w-16 shrink-0 rounded object-cover"
+          className="h-24 w-16 shrink-0 rounded-lg object-cover"
         />
       ) : (
-        <div className="flex h-24 w-16 shrink-0 items-center justify-center rounded bg-zinc-700">
-          <span className="text-xs text-zinc-400">No img</span>
+        <div className="flex h-24 w-16 shrink-0 items-center justify-center rounded-lg bg-white/5">
+          <span className="text-xs text-muted">No img</span>
         </div>
       )}
 
       {/* Game info */}
       <div className="flex flex-1 flex-col justify-center">
-        <h3 className="font-medium text-zinc-50">
+        <h3 className="font-medium text-primary">
           {game.title}
           {game.release_year && (
-            <span className="ml-2 text-sm font-normal text-zinc-500">
+            <span className="ml-2 text-sm font-normal text-muted">
               ({game.release_year})
             </span>
           )}
         </h3>
         {game.summary && (
-          <p className="mt-1 line-clamp-2 text-sm text-zinc-400">
+          <p className="mt-1 line-clamp-2 text-sm text-secondary">
             {game.summary}
           </p>
         )}
       </div>
 
-      {/* Add button (optional) */}
+      {/* Add button */}
       {showAddButton && onSelect && (
         <div className="flex items-center">
-          <button
-            type="button"
-            onClick={() => onSelect(game)}
-            className="shrink-0 rounded-md bg-zinc-50 px-4 py-2 text-sm font-medium text-zinc-900 transition-colors hover:bg-zinc-200 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2"
-          >
-            {addButtonLabel}
-          </button>
+          {isAdding ? (
+            <Loader2 className="h-4 w-4 animate-spin text-muted" />
+          ) : (
+            <button
+              type="button"
+              onClick={() => onSelect(game)}
+              className="flex shrink-0 cursor-pointer items-center justify-center rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-primary transition-colors hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/20"
+            >
+              {addButtonLabel}
+            </button>
+          )}
         </div>
       )}
     </div>

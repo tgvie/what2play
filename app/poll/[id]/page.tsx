@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { headers, cookies } from "next/headers";
 import { notFound } from "next/navigation";
+import { ArrowLeft, Dot } from "lucide-react";
 import { createServerClient, createAnonClient } from "@/utils/supabase/server";
 import CopyButton from "./CopyButton";
 import PollGamesSection from "./PollGamesSection";
@@ -136,27 +137,31 @@ export default async function PollPage({
     <div className="min-h-screen px-4 py-8">
       <main className="mx-auto w-full max-w-2xl">
         {/* Poll Header */}
-        <div className="mb-6">
-          <h1 className="text-3xl font-bold">
+        <div className="mt-6 mb-6">
+          <h1 className="text-3xl font-bold text-primary">
             {poll.title}
           </h1>
           {poll.description && (
-            <p className="mt-2 text-zinc-400">
+            <p className="mt-2 text-secondary">
               {poll.description}
             </p>
           )}
-          <p className="mt-2 text-sm text-zinc-500">
+          <p className="mt-2 flex items-center text-sm text-muted">
             Created by{" "}
-            <span className="font-medium text-zinc-300">
+            <span className="ml-1 font-medium text-secondary">
               {creator?.username || "Unknown"}
-            </span>{" "}
-            on {createdDate}
+            </span>
+            <Dot className="h-4 w-4" />
+            {createdDate}
           </p>
         </div>
 
         {/* Shareable Link Card */}
-        <div className="mb-6 rounded-lg border border-zinc-800 bg-zinc-900 p-4 shadow-sm">
-          <label className="mb-2 block text-sm font-medium text-zinc-300">
+        <div
+          className="mb-6 rounded-xl border border-white/10 p-4 shadow-[0_4px_30px_rgba(0,0,0,0.1)] backdrop-blur-[2.2px]"
+          style={{ background: "rgba(255, 255, 255, 0.03)" }}
+        >
+          <label className="mb-2 block text-sm font-medium text-secondary">
             Share this poll
           </label>
           <div className="flex items-center gap-2">
@@ -164,7 +169,7 @@ export default async function PollPage({
               type="text"
               value={shareableUrl}
               readOnly
-              className="w-full rounded-md border border-zinc-700 bg-zinc-800 px-3 py-2 text-sm text-zinc-50"
+              className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-primary"
             />
             <CopyButton url={shareableUrl} />
           </div>
@@ -178,17 +183,18 @@ export default async function PollPage({
         />
 
         {/* Navigation */}
-        <div className="flex justify-center gap-4 border-t border-zinc-800 pt-6">
+        <div className="flex justify-center gap-4 border-t border-white/10 pt-6">
           <Link
             href="/create"
-            className="text-sm text-zinc-400 underline underline-offset-4 hover:text-zinc-50"
+            className="text-sm text-pink underline underline-offset-4 hover:text-pink-light"
           >
             Create another poll
           </Link>
           <Link
             href="/"
-            className="text-sm text-zinc-400 underline underline-offset-4 hover:text-zinc-50"
+            className="inline-flex items-center gap-1 text-sm text-muted transition-colors hover:text-primary"
           >
+            <ArrowLeft className="h-4 w-4" />
             Back to home
           </Link>
         </div>

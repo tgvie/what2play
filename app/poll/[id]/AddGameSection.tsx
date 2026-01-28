@@ -5,21 +5,19 @@ import GameExplorer, { Game } from "@/components/GameExplorer";
 
 type AddGameSectionProps = {
   pollId: string;
-  onGameAdded: () => void;
+  onGameAdded: (igdbId: number) => void;
 };
 
 // Section for searching and adding games
 export default function AddGameSection({ pollId, onGameAdded }: AddGameSectionProps) {
-  const [adding, setAdding] = useState(false);
+  const [addingGameId, setAddingGameId] = useState<number | null>(null);
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
   const [resetKey, setResetKey] = useState(0);
 
   // Handle adding a game to the poll
   async function handleAddGame(game: Game) {
-    setAdding(true);
+    setAddingGameId(game.igdb_id);
     setError("");
-    setSuccess("");
 
     try {
       const response = await fetch(`/api/polls/${pollId}/games`, {
@@ -39,37 +37,30 @@ export default function AddGameSection({ pollId, onGameAdded }: AddGameSectionPr
         return;
       }
 
-      setSuccess(`"${game.title}" added to poll!`);
-      onGameAdded();
+      // Notify parent with the added game's igdb_id for highlighting
+      onGameAdded(game.igdb_id);
       setResetKey((prev) => prev + 1);
-
-      // Clear success message after 3 seconds
-      setTimeout(() => setSuccess(""), 3000);
     } catch (err) {
       setError("Network error. Please try again.");
       console.error("Add game error:", err);
     } finally {
-      setAdding(false);
+      setAddingGameId(null);
     }
   }
 
   return (
-    <div className="mb-6 rounded-lg border border-zinc-800 bg-zinc-900 p-4 shadow-sm">
+    <div
+      className="mb-6 rounded-xl border border-white/10 p-4 shadow-[0_4px_30px_rgba(0,0,0,0.1)] backdrop-blur-[2.2px]"
+      style={{ background: "rgba(255, 255, 255, 0.03)" }}
+    >
       {/* Header */}
-      <h3 className="mb-4 font-semibold">
+      <h3 className="mb-4 font-semibold text-primary">
         Search for a game to add
       </h3>
 
-      {/* Success message */}
-      {success && (
-        <div className="mb-4 rounded-md border border-green-900 bg-green-950 px-4 py-3 text-sm text-green-400">
-          {success}
-        </div>
-      )}
-
       {/* Error message */}
       {error && (
-        <div className="mb-4 rounded-md border border-red-900 bg-red-950 px-4 py-3 text-sm text-red-400">
+        <div className="mb-4 rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-400">
           {error}
         </div>
       )}
@@ -78,9 +69,10 @@ export default function AddGameSection({ pollId, onGameAdded }: AddGameSectionPr
       <GameExplorer
         placeholder="Search for a game..."
         showAddButton={true}
-        addButtonLabel={adding ? "Adding..." : "Add"}
+        addButtonLabel="Add"
         onGameSelect={handleAddGame}
         resetKey={resetKey}
+        addingGameId={addingGameId}
       />
     </div>
   );

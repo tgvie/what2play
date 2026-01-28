@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useCallback } from "react";
+import Link from "next/link";
+import { UserCheck, Loader2, CheckCheck } from "lucide-react";
 import AddGameSection from "./AddGameSection";
 
 type Voter = {
@@ -31,6 +33,7 @@ export default function PollGamesSection({
   currentUserId,
 }: PollGamesSectionProps) {
   const [games, setGames] = useState<PollGame[]>(initialGames);
+  const [highlightedGameId, setHighlightedGameId] = useState<number | null>(null);
 
   // Refresh games from server
   const refreshGames = useCallback(async () => {
@@ -45,25 +48,40 @@ export default function PollGamesSection({
     }
   }, [pollId]);
 
+  // Handle game added -> highlight and fade out over 3 seconds
+  const handleGameAdded = useCallback(async (igdbId: number) => {
+    await refreshGames();
+    setHighlightedGameId(igdbId);
+    // Start fade out on next frame so animation triggers
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        setHighlightedGameId(null);
+      });
+    });
+  }, [refreshGames]);
+
   return (
     <div className="mb-6">
       {/* Add Game Section */}
-      <AddGameSection pollId={pollId} onGameAdded={refreshGames} />
+      <AddGameSection pollId={pollId} onGameAdded={handleGameAdded} />
 
       {/* Games List Header */}
       <div className="mb-4">
-        <h2 className="text-xl font-semibold">
+        <h2 className="text-xl font-semibold text-primary">
           Game Suggestions ({games.length})
         </h2>
-        <p className="mt-1 text-sm text-zinc-500">
+        <p className="mt-1 text-sm text-muted">
           Click &quot;Vote&quot; to vote for a game. Click again to remove your vote.
         </p>
       </div>
 
       {/* Games List - sorted by votes (highest first) */}
       {games.length === 0 ? (
-        <div className="rounded-lg border border-dashed border-zinc-700 bg-zinc-900/50 p-8 text-center">
-          <p className="text-zinc-500">
+        <div
+          className="rounded-xl border border-dashed border-white/10 p-8 text-center shadow-[0_4px_30px_rgba(0,0,0,0.1)] backdrop-blur-[2.2px]"
+          style={{ background: "rgba(255, 255, 255, 0.03)" }}
+        >
+          <p className="text-muted">
             No games suggested yet. Be the first to add one!
           </p>
         </div>
@@ -79,6 +97,7 @@ export default function PollGamesSection({
                 currentUserId={currentUserId}
                 onVoteChange={refreshGames}
                 isTopThree={index < 3 && game.vote_count > 0}
+                isHighlighted={highlightedGameId === game.igdb_id}
               />
             ))}
         </div>
@@ -94,12 +113,14 @@ function GameCard({
   currentUserId,
   onVoteChange,
   isTopThree,
+  isHighlighted,
 }: {
   game: PollGame;
   pollId: string;
   currentUserId: string | null;
   onVoteChange: () => void;
   isTopThree: boolean;
+  isHighlighted: boolean;
 }) {
   const [voting, setVoting] = useState(false);
 
@@ -131,13 +152,21 @@ function GameCard({
     }
   }
 
+  // Determine card styling based on state
+  const getCardStyles = () => {
+    if (isHighlighted) {
+      return "border-green-500/50 bg-green-500/10";
+    }
+    if (isTopThree) {
+      return "border-pink/30 bg-pink/10";
+    }
+    return "border-white/10";
+  };
+
   return (
     <div
-      className={`flex gap-3 rounded-lg border p-3 shadow-sm ${
-        isTopThree
-          ? "border-yellow-500 bg-yellow-800/30"
-          : "border-zinc-800 bg-zinc-900"
-      }`}
+      className={`flex gap-3 rounded-xl border p-3 shadow-[0_4px_30px_rgba(0,0,0,0.1)] backdrop-blur-[2.2px] transition-all duration-3000 ease-out ${getCardStyles()}`}
+      style={!isTopThree && !isHighlighted ? { background: "rgba(255, 255, 255, 0.03)" } : undefined}
     >
       {/* Game cover */}
       {game.cover_url ? (
@@ -145,23 +174,24 @@ function GameCard({
         <img
           src={game.cover_url}
           alt={`${game.title} cover`}
-          className="h-20 w-14 shrink-0 rounded object-cover"
+          className="h-20 w-14 shrink-0 rounded-lg object-cover"
         />
       ) : (
-        <div className="flex h-20 w-14 shrink-0 items-center justify-center rounded bg-zinc-700">
-          <span className="text-xs text-zinc-400">No img</span>
+        <div className="flex h-20 w-14 shrink-0 items-center justify-center rounded-lg bg-white/10">
+          <span className="text-xs text-muted">No img</span>
         </div>
       )}
 
       {/* Game info and voting */}
       <div className="flex flex-1 flex-col justify-between">
-        <h3 className="font-medium">
+        <h3 className="font-medium text-primary">
           {game.title}
         </h3>
 
         {/* Voters list */}
         {game.vote_count > 0 && (
-          <p className="text-xs text-zinc-500">
+          <p className="flex items-center gap-1 text-xs text-secondary">
+            <UserCheck className="h-3.5 w-3.5" />
             {game.voters.map((v) => v.username).join(", ")}
           </p>
         )}
@@ -173,20 +203,30 @@ function GameCard({
               type="button"
               onClick={handleVote}
               disabled={voting}
-              className={`rounded px-3 py-1 text-sm font-medium transition-colors ${
+              className={`cursor-pointer rounded-md border px-3 py-1 text-sm font-medium transition-colors duration-150 ${
                 hasVoted
-                  ? "bg-green-900 text-green-300 hover:bg-green-800"
-                  : "bg-zinc-800 text-zinc-300 hover:bg-zinc-700"
+                  ? "border-pink/30 bg-pink/20 text-pink hover:bg-pink/30"
+                  : "border-pink/50 bg-pink text-surface hover:bg-pink-light"
               } disabled:cursor-not-allowed disabled:opacity-50`}
             >
-              {voting ? "..." : hasVoted ? "Voted" : "Vote"}
+              {voting ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : hasVoted ? (
+                <span className="flex items-center gap-1">
+                  <CheckCheck className="h-3.5 w-3.5" />
+                  Voted
+                </span>
+              ) : "Vote"}
             </button>
           ) : (
-            <span className="text-sm italic text-zinc-500">
+            <Link
+              href="/login"
+              className="text-sm text-pink underline underline-offset-2 hover:text-pink-light"
+            >
               Log in to vote
-            </span>
+            </Link>
           )}
-          <span className="text-sm text-zinc-400">
+          <span className="text-sm text-muted">
             {game.vote_count} {game.vote_count === 1 ? "vote" : "votes"}
           </span>
         </div>
