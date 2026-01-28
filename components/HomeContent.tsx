@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { PlusCircle, History, Gamepad2, LogIn, Link2, X } from "lucide-react";
+import { PlusCircle, History, Gamepad2, LogIn, Link2, X, Loader2 } from "lucide-react";
 import LogoutButton from "./LogoutButton";
 import Button from "./Button";
 import Logo from "./Logo";
@@ -225,7 +225,7 @@ export default function HomeContent({ isLoggedIn }: HomeContentProps) {
                     disabled={loading}
                     className="cursor-pointer mt-auto w-full rounded-lg! px-3! py-2! text-sm!"
                   >
-                    {loading ? "..." : isSignup ? "Sign Up" : "Log In"}
+                    {loading ? <Loader2 className="h-5 w-5 animate-spin" /> : isSignup ? "Sign Up" : "Log In"}
                   </Button>
                 </form>
               </div>

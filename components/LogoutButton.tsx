@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { LogOut } from "lucide-react";
+import { LogOut, Loader2 } from "lucide-react";
 
 // Logout button with custom confirmation modal
 export default function LogoutButton() {
@@ -75,7 +75,7 @@ export default function LogoutButton() {
                 disabled={loading}
                 className="flex-1 cursor-pointer rounded-lg bg-pink px-4 py-2 font-medium text-surface transition-all hover:bg-pink-light hover:shadow-lg hover:shadow-pink/20 disabled:opacity-50"
               >
-                {loading ? "Logging out..." : "Log out"}
+                {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Log out"}
               </button>
             </div>
           </div>

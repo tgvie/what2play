@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Loader2 } from "lucide-react";
 import Button from "@/components/Button";
 import Logo from "@/components/Logo";
 
@@ -155,7 +155,7 @@ export default function LoginPage() {
 
           {/* Submit button */}
           <Button type="submit" disabled={loading} className="cursor-pointer w-full">
-            {loading ? "Please wait..." : isSignup ? "Create Account" : "Log In"}
+            {loading ? <Loader2 className="h-5 w-5 animate-spin" /> : isSignup ? "Create Account" : "Log In"}
           </Button>
         </form>
 

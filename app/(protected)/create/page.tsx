@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Loader2 } from "lucide-react";
 import Logo from "@/components/Logo";
 import Button from "@/components/Button";
 
@@ -127,7 +127,7 @@ export default function CreatePollPage() {
             disabled={loading || !title.trim()}
             className="w-full"
           >
-            {loading ? "Creating..." : "Create Poll"}
+            {loading ? <Loader2 className="h-5 w-5 animate-spin" /> : "Create Poll"}
           </Button>
         </form>
 
