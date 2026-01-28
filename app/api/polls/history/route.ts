@@ -83,7 +83,12 @@ export async function GET(request: NextRequest) {
     // Extract unique polls from votes (remove duplicates)
     const participatedMap = new Map();
     (votedPolls || []).forEach((vote) => {
-      const pollData = vote.poll_games?.polls;
+      // Handle nested relations (can be array or single object)
+      const pollGames = vote.poll_games;
+      const pollGamesData = Array.isArray(pollGames) ? pollGames[0] : pollGames;
+      const polls = pollGamesData?.polls;
+      const pollData = Array.isArray(polls) ? polls[0] : polls;
+      
       if (pollData && !participatedMap.has(pollData.id)) {
         // Skip polls the user created (they'll be in the created list)
         if (pollData.creator_id !== userId) {
