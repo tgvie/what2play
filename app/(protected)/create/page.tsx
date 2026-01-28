@@ -3,11 +3,13 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
+import Logo from "@/components/Logo";
+import Button from "@/components/Button";
 
 /**
  * Create Poll page
-*/
-
+ */
 export default function CreatePollPage() {
   const router = useRouter();
 
@@ -52,38 +54,37 @@ export default function CreatePollPage() {
       <main className="w-full max-w-lg">
         {/* Header */}
         <div className="mb-8 text-center">
-          <h1 className="text-3xl font-bold">
-            Create Poll
+          <Logo />
+          <h1 className="mt-4 text-3xl font-semibold text-primary">
+            Create a new poll
           </h1>
-          <p className="mt-2 text-zinc-400">
-            Start a new game poll and share it with your friends
-          </p>
         </div>
 
         {/* Poll Form */}
         <form
           onSubmit={handleSubmit}
-          className="rounded-lg border border-zinc-800 bg-zinc-900 p-6 shadow-sm"
+          className="rounded-xl border border-white/10 p-6 shadow-[0_4px_30px_rgba(0,0,0,0.1)] backdrop-blur-[2.2px]"
+          style={{ background: "rgba(255, 255, 255, 0.03)" }}
         >
           {/* Title input */}
           <div className="mb-4">
             <label
               htmlFor="title"
-              className="mb-2 block text-sm font-medium text-zinc-300"
+              className="mb-2 block text-base font-medium text-secondary"
             >
-              Poll Title <span className="text-red-500">*</span>
+              Poll Title <span className="text-pink">*</span>
             </label>
             <input
               id="title"
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="What should we play this weekend?"
+              placeholder="What should we play tonight?"
               maxLength={100}
               required
-              className="w-full rounded-md border border-zinc-700 bg-zinc-800 px-4 py-2 text-zinc-50 placeholder-zinc-500 focus:border-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-500/20"
+              className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-primary placeholder-muted transition-colors focus:border-pink/50 focus:outline-none focus:ring-2 focus:ring-pink/20"
             />
-            <p className="mt-1 text-xs text-zinc-500">
+            <p className="mt-1 text-xs text-muted">
               {title.length}/100 characters
             </p>
           </div>
@@ -92,9 +93,9 @@ export default function CreatePollPage() {
           <div className="mb-6">
             <label
               htmlFor="description"
-              className="mb-2 block text-sm font-medium text-zinc-300"
+              className="mb-2 block text-base font-medium text-secondary"
             >
-              Description <span className="text-zinc-400">(optional)</span>
+              Description <span className="text-muted">(optional)</span>
             </label>
             <textarea
               id="description"
@@ -103,9 +104,9 @@ export default function CreatePollPage() {
               placeholder="Add some context for your friends..."
               maxLength={500}
               rows={3}
-              className="w-full resize-none rounded-md border border-zinc-700 bg-zinc-800 px-4 py-2 text-zinc-50 placeholder-zinc-500 focus:border-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-500/20"
+              className="w-full resize-none rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-primary placeholder-muted transition-colors focus:border-pink/50 focus:outline-none focus:ring-2 focus:ring-pink/20"
             />
-            <p className="mt-1 text-xs text-zinc-500">
+            <p className="mt-1 text-xs text-muted">
               {description.length}/500 characters
             </p>
           </div>
@@ -114,29 +115,30 @@ export default function CreatePollPage() {
           {error && (
             <div
               role="alert"
-              className="mb-4 rounded-md border border-red-900 bg-red-950 px-4 py-3 text-sm text-red-400"
+              className="mb-4 rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-400"
             >
               {error}
             </div>
           )}
 
           {/* Submit button */}
-          <button
+          <Button
             type="submit"
             disabled={loading || !title.trim()}
-            className="w-full rounded-md bg-zinc-50 px-4 py-3 font-medium text-zinc-900 transition-colors hover:bg-zinc-200 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+            className="w-full"
           >
             {loading ? "Creating..." : "Create Poll"}
-          </button>
+          </Button>
         </form>
 
         {/* Back link */}
         <p className="mt-6 text-center">
           <Link
             href="/"
-            className="text-sm text-zinc-500 hover:text-zinc-300"
+            className="inline-flex items-center gap-1 text-sm text-muted transition-colors hover:text-primary"
           >
-            ← Back to home
+            <ArrowLeft className="h-4 w-4" />
+            Back to home
           </Link>
         </p>
       </main>
