@@ -52,7 +52,7 @@ export default function LogoutButton() {
             className="w-full max-w-sm rounded-xl border border-white/10 bg-surface/95 p-6 shadow-2xl backdrop-blur-lg"
             onClick={(e) => e.stopPropagation()}
           >
-            <h2 className="mb-2 text-lg font-semibold text-primary">
+            <h2 className="mb-2 text-base font-semibold text-primary">
               Log out
             </h2>
             <p className="mb-6 text-secondary">
