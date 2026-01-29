@@ -79,7 +79,7 @@ export default function CreatePollPage() {
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="What should we play tonight?"
+              placeholder="e.g. Friday Game Night, Co-op Games..."
               maxLength={100}
               required
               className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-primary placeholder-muted transition-colors focus:border-pink/50 focus:outline-none focus:ring-2 focus:ring-pink/20"
