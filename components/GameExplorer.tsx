@@ -112,7 +112,7 @@ export default function GameExplorer({
           <button
             type="button"
             onClick={handleClear}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted transition-colors hover:text-primary"
+            className="cursor-pointer absolute right-3 top-1/2 -translate-y-1/2 text-muted transition-colors hover:text-primary"
             aria-label="Clear search"
           >
             <X className="h-5 w-5" />
