@@ -136,8 +136,19 @@ export default async function PollPage({
   return (
     <div className="min-h-screen px-4 py-8">
       <main className="mx-auto w-full max-w-2xl">
+        {/* Back link */}
+        <div className="mb-6">
+          <Link
+            href="/"
+            className="inline-flex items-center gap-1 text-sm text-muted transition-colors hover:text-primary"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back to home
+          </Link>
+        </div>
+
         {/* Poll Header */}
-        <div className="mt-6 mb-6">
+        <div className="mb-6">
           <h1 className="text-3xl font-bold text-primary">
             {poll.title}
           </h1>
@@ -183,19 +194,12 @@ export default async function PollPage({
         />
 
         {/* Navigation */}
-        <div className="flex justify-center gap-4 border-t border-white/10 pt-6">
+        <div className="flex justify-center border-t border-white/10 pt-6">
           <Link
             href="/create"
             className="text-sm text-pink underline underline-offset-4 hover:text-pink-light"
           >
             Create another poll
-          </Link>
-          <Link
-            href="/"
-            className="inline-flex items-center gap-1 text-sm text-muted transition-colors hover:text-primary"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Back to home
           </Link>
         </div>
       </main>

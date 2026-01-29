@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
 import GameExplorer, { Game } from "@/components/GameExplorer";
 
 // Explore Games page
@@ -30,6 +31,17 @@ export default function ExplorePage() {
   return (
     <div className="min-h-screen px-4 py-8">
       <main className="mx-auto w-full max-w-4xl">
+        {/* Back link */}
+        <div className="mb-6">
+          <Link
+            href="/"
+            className="inline-flex items-center gap-1 text-sm text-muted transition-colors hover:text-primary"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back to home
+          </Link>
+        </div>
+
         {/* Header */}
         <div className="mb-8 text-center">
           <h1 className="text-3xl font-bold">
@@ -69,15 +81,6 @@ export default function ExplorePage() {
           )}
         </div>
 
-        {/* Back link */}
-        <div className="mt-8 text-center">
-          <Link
-            href="/"
-            className="text-sm text-zinc-500 hover:text-zinc-300"
-          >
-            ← Back to home
-          </Link>
-        </div>
       </main>
     </div>
   );

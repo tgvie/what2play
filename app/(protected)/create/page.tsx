@@ -52,6 +52,17 @@ export default function CreatePollPage() {
   return (
     <div className="flex min-h-screen items-center justify-center px-4">
       <main className="w-full max-w-lg">
+        {/* Back link */}
+        <div className="mb-6">
+          <Link
+            href="/"
+            className="inline-flex items-center gap-1 text-sm text-muted transition-colors hover:text-primary"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back to home
+          </Link>
+        </div>
+
         {/* Header */}
         <div className="mb-8 text-center">
           <Logo />
@@ -131,16 +142,6 @@ export default function CreatePollPage() {
           </Button>
         </form>
 
-        {/* Back link */}
-        <p className="mt-6 text-center">
-          <Link
-            href="/"
-            className="inline-flex items-center gap-1 text-sm text-muted transition-colors hover:text-primary"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Back to home
-          </Link>
-        </p>
       </main>
     </div>
   );

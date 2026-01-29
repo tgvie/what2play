@@ -65,8 +65,19 @@ export default function HistoryPage() {
   return (
     <div className="min-h-screen px-4 py-8">
       <main className="mx-auto w-full max-w-2xl">
+        {/* Back link */}
+        <div className="mb-6">
+          <Link
+            href="/"
+            className="inline-flex items-center gap-1 text-sm text-muted transition-colors hover:text-primary"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back to home
+          </Link>
+        </div>
+
         {/* Header */}
-        <div className="mt-6 mb-8 text-center">
+        <div className="mb-8 text-center">
           <Logo />
           <h1 className="mt-6 text-3xl font-bold">Poll History</h1>
           <p className="mt-2 text-zinc-400">
@@ -181,16 +192,6 @@ export default function HistoryPage() {
           </>
         )}
 
-        {/* Back link */}
-        <div className="text-center">
-          <Link
-            href="/"
-            className="inline-flex items-center gap-1 text-sm text-muted transition-colors hover:text-primary"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Back to home
-          </Link>
-        </div>
       </main>
     </div>
   );

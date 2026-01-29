@@ -70,6 +70,17 @@ export default function LoginPage() {
   return (
     <div className="flex min-h-screen items-center justify-center px-4">
       <main className="w-full max-w-md">
+        {/* Back link */}
+        <div className="mb-6">
+          <Link
+            href="/"
+            className="inline-flex items-center gap-1 text-sm text-muted transition-colors hover:text-primary"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back to home
+          </Link>
+        </div>
+
         {/* Header */}
         <div className="mb-12 text-center">
           <Logo />
@@ -171,16 +182,6 @@ export default function LoginPage() {
           </button>
         </p>
 
-        {/* Back to home link */}
-        <p className="mt-4 text-center">
-          <Link
-            href="/"
-            className="inline-flex items-center gap-1 text-sm text-muted transition-colors hover:text-primary"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Back to home
-          </Link>
-        </p>
       </main>
     </div>
   );
